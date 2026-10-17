@@ -7,7 +7,7 @@
 - **Publisher MD5:** `178bcf9bb1f31a3dfe12d0e577884add`.
 - **Local path:** `data/raw/creditcard.arff`, unchanged from the source.
 - **Provenance files:** `source-openml-1597.json` preserves provider metadata; `manifest.json` records retrieval time, size and checksums.
-- **Source license label:** OpenML labels this release “Public”; this is not a substitute for a specific redistribution license. Keep the raw file out of Git and review publisher terms before public redistribution.
+- **Source license label:** OpenML labels this release “Public”; this is not a substitute for a specific redistribution license. The original ARFF is excluded from Git; full CSV exports are committed under the original release's ODbL/DbCL terms. See DATASET.md for attribution and CSV details.
 
 ## Dataset meaning
 
@@ -25,3 +25,7 @@ Citation supplied by OpenML: Andrea Dal Pozzolo, Olivier Caelen, Reid A. Johnson
 6. Use source-derived sample inputs for the application when display is permitted. Any generated tests or economic scenarios are supplementary and labeled.
 
 Run `python3 scripts/download_data.py --verify-only` from the project directory to recheck the local raw file without network access.
+
+## Committed CSV exports
+
+See [DATASET.md](DATASET.md) for the five complete-data CSV shards, license attribution and [csv-manifest.json](csv-manifest.json) for counts and SHA-256 checksums.

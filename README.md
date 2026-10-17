@@ -6,6 +6,10 @@
 
 Part of [Tomas Ferrer's DS/ML portfolio](https://tomasferrer.com/).
 
+## Committed CSV dataset
+
+The **complete dataset is committed** under [`data/raw/`](data/raw/), split into five CSV files with identical headers. All 284,807 transactions and 492 fraud labels are included; no download step is needed to use the CSVs. See [data files and attribution](data/DATASET.md) and [CSV checksums](data/csv-manifest.json). The original ARFF is retained locally and remains available through the acquisition script.
+
 ## Project prompt
 
 Build an end-to-end fraud detection application that turns a published online dataset into a useful business decision. Implement the analysis, a trained machine learning component, a deployed application, its MLOps lifecycle, and a presentation. The learned model must influence the application's output. Begin with the dataset and adapt the scope to the evidence it actually contains.
