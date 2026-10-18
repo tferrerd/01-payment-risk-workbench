@@ -1,19 +1,17 @@
-# Reference dependency inventory: fraud_shipping
+# Dependency-stack survey
 
-Inspected 2026-10-17 at commit `734e4306725c3aa306845e7040a0525d6730da70`.
-
-[Source lockfile](https://github.com/JuanFeDS/fraud_shipping/blob/734e4306725c3aa306845e7040a0525d6730da70/poetry.lock) · [Direct dependency configuration](https://github.com/JuanFeDS/fraud_shipping/blob/734e4306725c3aa306845e7040a0525d6730da70/pyproject.toml)
+Surveyed 2026-10-17. This anonymized catalog describes an external example stack, not the installed environment of Payment Risk Workbench. See this project's `pyproject.toml` and `poetry.lock` for its actual dependencies.
 
 ## What the scan establishes
 
 - 150 locked package entries; 148 unique package names.
 - 18 directly declared package dependencies, excluding Python itself.
-- This is an inventory of the reference, not a dependency installation plan for Payment Risk Workbench.
-- Versions below are the reference versions, not independently verified compatibility recommendations.
+- This is an inventory of the surveyed stack, not a dependency installation plan for Payment Risk Workbench.
+- Versions below are the surveyed versions, not independently verified compatibility recommendations.
 - A lockfile includes alternatives and conditional dependencies. The active platform, Python version, requested groups, extras and dependency constraints determine the installed set.
-- `numba` and `llvmlite` each appear at two versions. Do not install both versions into one environment. This scan does not claim to have resolved or tested the reference environment.
+- `numba` and `llvmlite` each appear at two versions. Do not install both versions into one environment. This scan does not claim to have resolved or tested the surveyed environment.
 - The parent column reports dependency declarations found in the lockfile, including conditional declarations; it does not assert every edge is active on this Mac.
-- Package descriptions below come from lockfile metadata. An installed package does not necessarily represent a tool the author uses directly.
+- Package descriptions below come from lockfile metadata. An installed package does not necessarily represent a tool a project uses directly.
 
 ## Important distinctions
 
@@ -22,11 +20,11 @@ Inspected 2026-10-17 at commit `734e4306725c3aa306845e7040a0525d6730da70`.
 - `docker` here is the Python Docker SDK. The Docker engine/CLI used for containers is a separate installation.
 - OpenTelemetry packages, GraphQL packages and additional web servers are supporting dependencies; their presence alone does not establish separately configured tracing, GraphQL or serving systems.
 - `pywin32` and `appnope` support different operating systems. An NVIDIA runtime entry does not mean this project requires an NVIDIA GPU.
-- Poetry, poetry-core, pipx, system libraries, browser executables and cloud services are not exhaustively represented by this application lockfile. See the repository deployment files for those requirements.
+- Poetry, poetry-core, pipx, system libraries, browser executables and cloud services are not exhaustively represented by this application lockfile. Those requirements must be inventoried separately from application dependencies.
 
 ## Complete lockfile inventory
 
-“Direct” identifies the group in `pyproject.toml`. “Transitive” means another package declares the dependency. Direct imports such as NumPy, SciPy, Matplotlib, joblib and Pydantic can still be transitive in this reference configuration. Our project should declare the libraries it imports.
+“Direct” identifies the group in `pyproject.toml`. “Transitive” means another package declares the dependency. Direct imports such as NumPy, SciPy, Matplotlib, joblib and Pydantic can still be transitive in the surveyed configuration. Our project should declare the libraries it imports.
 
 | Package | Locked version | Declaration | Declared parent packages | Description from lockfile |
 |---|---|---|---|---|

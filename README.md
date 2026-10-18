@@ -8,7 +8,7 @@ Part of [Tomas Ferrer's DS/ML portfolio](https://tomasferrer.com/).
 
 ## Implementation framework
 
-Follow the business-to-production workflow of [JuanFeDS/fraud_shipping](https://github.com/JuanFeDS/fraud_shipping), adapted to this dataset and the portfolio lifecycle requirements. The [implementation plan](docs/implementation-plan.md) defines the project charter, seven analysis stages, proposed temporal evaluation protocol, and delivery sequence. Start with exploration and explicit transaction economics; carry the evaluated preprocessing, model, calibration, and policy into the application.
+The project follows a business-to-production workflow adapted to this dataset and the portfolio lifecycle requirements. The [implementation plan](docs/implementation-plan.md) defines the project charter, seven analysis stages, proposed temporal evaluation protocol, and delivery sequence. Start with exploration and explicit transaction economics; carry the evaluated preprocessing, model, calibration, and policy into the application.
 
 ## Committed CSV dataset
 

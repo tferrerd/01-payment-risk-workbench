@@ -2,11 +2,9 @@
 
 Recorded 2026-10-17. Status: plan agreed in direction; analysis and implementation pending.
 
-## Reference and approach
+## Implementation approach
 
-Follow [JuanFeDS/fraud_shipping](https://github.com/JuanFeDS/fraud_shipping/tree/734e4306725c3aa306845e7040a0525d6730da70), reviewed at commit `734e4306725c3aa306845e7040a0525d6730da70`.
-
-Adopt its progression from business economics through analysis, fitted inference, and operational delivery. Use numbered notebooks with corresponding executive reports, shared Python code, repeatable scripts, MLflow lineage, and a versioned deployment. This is an original implementation on the ULB dataset. Reference results are not project results. No reference code has been copied.
+Progress from business economics through analysis, fitted inference, and operational delivery. Use numbered notebooks with corresponding executive reports, shared Python code, repeatable scripts, MLflow lineage, and a versioned deployment. Base project findings and implementation decisions on the ULB dataset and reproducible experiments.
 
 ## Project charter
 
