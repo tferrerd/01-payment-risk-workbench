@@ -1,0 +1,11 @@
+{
+  "version": "temporal-v1",
+  "recorded_date": "2026-10-18",
+  "time_column": "Time",
+  "boundary_seconds": [86400, 115200, 144000],
+  "split_names": ["train", "selection", "calibration", "evaluation"],
+  "boundary_rule": "A transaction at a boundary belongs to the later split; tied timestamps stay together.",
+  "duplicate_policy": "Retain all source rows. Report primary metrics on all evaluation rows and sensitivity metrics excluding V1–V28/Amount vectors observed in earlier splits.",
+  "evaluation_exposure": "Full-dataset label-aware EDA preceded this protocol. Evaluation is reserved from subsequent fitting/tuning, but is not an untouched analytical holdout.",
+  "label_availability": "Historical replay assumes earlier-window labels are available for fitting. Actual label delays are unknown; do not claim this demonstrates a deployable retraining cadence."
+}

@@ -40,11 +40,11 @@ Each stage produces an executed notebook and a short report under `docs/reports/
 
 ## Evaluation protocol
 
-Proposed time boundaries, to validate against label counts during stage 01: training `[0, 86400)`, model selection `[86400, 115200)`, calibration/policy development `[115200, 144000)`, and final evaluation `[144000, end]`. Freeze boundaries before model experiments. Keep tied timestamps together and persist split assignments with source row IDs. If class counts cannot support a stage, revise the protocol before fitting and record the reason.
+Frozen as `temporal-v1` on 2026-10-18: training `[0, 86400)`, model selection `[86400, 115200)`, calibration/policy development `[115200, 144000)`, and evaluation `[144000, end]`. All windows contain both classes. See the [evaluation protocol](evaluation-protocol.md), [configuration](../config/evaluation.json), and [duplicate/split audit](../reports/duplicate-split-audit.json). Tied timestamps stay together; split assignments include source row IDs. Economics and policy assumptions still need to be specified before policy selection.
 
 Audit exact duplicates and identical-feature conflicting labels across boundaries. Report overlap and a sensitivity evaluation excluding repeated evaluation feature vectors; do not silently discard records or invent customer groups. There are no customer identifiers for grouped validation. Upstream PCA fitting provenance limits any claim of fully leakage-free preprocessing.
 
-Use average precision as the stated PR ranking metric, recall at a development-selected threshold targeting 0.1% false positives, realized false-positive rate, Brier score, reliability plots, and simulated policy cost. Report denominators and fraud counts for every window. The final period is opened once after candidate, calibrator, costs, and policy are frozen. Reusing it later makes it a regression benchmark, not a new independent test.
+Use average precision as the stated PR ranking metric, recall at a development-selected threshold targeting 0.1% false positives, realized false-positive rate, Brier score, reliability plots, and simulated policy cost. Report denominators and fraud counts for every window. Full-dataset label-aware EDA has already exposed the evaluation population; disclose that it is not an untouched analytical holdout. Reserve it from subsequent fitting/tuning, score the frozen candidate once, and treat reuse after changes as a regression benchmark. Fresh confirmation requires newly acquired later data.
 
 Use paired time-block resampling for cost differences, disclose block length and the short-window limitation, and check sensitivity to block size. Two days cannot establish long-term drift robustness, seasonality, or production impact.
 

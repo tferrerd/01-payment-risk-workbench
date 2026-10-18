@@ -96,6 +96,8 @@ Use the smallest architecture that completes this lifecycle. Select real-time or
 
 The [exploration notebook](notebooks/01-exploration.ipynb) covers schema and missingness, duplicates, class imbalance, transaction time and amount distributions, fraud incidence, PCA-feature distributions, and predictor correlations. Executed Seaborn grids and the Spearman heatmap are embedded in the notebook; standalone figures are in `reports/figures/`. These are descriptive findings, not trained-model evaluation or demonstrated business impact.
 
+The [temporal evaluation protocol](docs/evaluation-protocol.md) records fixed split boundaries, repeated-pattern sensitivity, and the limitation that full-dataset label-aware EDA preceded the split freeze. Reproduce the population audit and local row assignments with `poetry run python scripts/audit_splits.py`. Its versioned configuration and report are committed; processed row assignments are regenerated locally.
+
 ### Exploration environment
 
 Use Python 3.12 and Poetry 2.5.1 (the setup version used here). From the repository root:

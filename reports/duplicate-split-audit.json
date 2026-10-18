@@ -1,0 +1,238 @@
+{
+  "protocol": {
+    "version": "temporal-v1",
+    "recorded_date": "2026-10-18",
+    "time_column": "Time",
+    "boundary_seconds": [
+      86400,
+      115200,
+      144000
+    ],
+    "split_names": [
+      "train",
+      "selection",
+      "calibration",
+      "evaluation"
+    ],
+    "boundary_rule": "A transaction at a boundary belongs to the later split; tied timestamps stay together.",
+    "duplicate_policy": "Retain all source rows. Report primary metrics on all evaluation rows and sensitivity metrics excluding V1\u2013V28/Amount vectors observed in earlier splits.",
+    "evaluation_exposure": "Full-dataset label-aware EDA preceded this protocol. Evaluation is reserved from subsequent fitting/tuning, but is not an untouched analytical holdout.",
+    "label_availability": "Historical replay assumes earlier-window labels are available for fitting. Actual label delays are unknown; do not claim this demonstrates a deployable retraining cadence."
+  },
+  "source_files": [
+    {
+      "path": "data/raw/creditcard_001.csv",
+      "rows": 60000,
+      "sha256": "34ec859f17cf4316a5467606ac26a0f72c82888d057e2a638d7729e62e7ad3af"
+    },
+    {
+      "path": "data/raw/creditcard_002.csv",
+      "rows": 60000,
+      "sha256": "3771fba0b2ef05d25241e90f592143baf87fc1baece6263bd3bc5f8924b4a31b"
+    },
+    {
+      "path": "data/raw/creditcard_003.csv",
+      "rows": 60000,
+      "sha256": "c31849faa788384811dada586b041a4b7b206343d96a7323cfc2aeae8649cbeb"
+    },
+    {
+      "path": "data/raw/creditcard_004.csv",
+      "rows": 60000,
+      "sha256": "d7cae12b932fd1db732d3b29580309cbc621ccb8e99a8bd856584391baf91f39"
+    },
+    {
+      "path": "data/raw/creditcard_005.csv",
+      "rows": 44807,
+      "sha256": "467258e428f60b3f5166b4c6c0a17ee8551ec9bd6fb7a115116ab6346e171773"
+    }
+  ],
+  "config_sha256": "ca8a48dc0431ac0a9882a28e56ef0b0e143fca4e3e91a45eec80a6da883b51cf",
+  "audit_script_sha256": "c6780a14bc18e6fab08ae0851f8d7f72ec97446b175048c626369a223f20fb34",
+  "split_summary": [
+    {
+      "split": "train",
+      "rows": 144786,
+      "frauds": 281,
+      "fraud_pct": 0.19407953807688588,
+      "time_min": 0.0,
+      "time_max": 86398.0
+    },
+    {
+      "split": "selection",
+      "rows": 17739,
+      "frauds": 75,
+      "fraud_pct": 0.42279722645019446,
+      "time_min": 86400.0,
+      "time_max": 115199.0
+    },
+    {
+      "split": "calibration",
+      "rows": 62340,
+      "frauds": 59,
+      "fraud_pct": 0.09464228424767404,
+      "time_min": 115200.0,
+      "time_max": 143999.0
+    },
+    {
+      "split": "evaluation",
+      "rows": 59942,
+      "frauds": 77,
+      "fraud_pct": 0.12845750892529445,
+      "time_min": 144002.0,
+      "time_max": 172792.0
+    }
+  ],
+  "duplicates": {
+    "all_columns": {
+      "columns": [
+        "Time",
+        "V1",
+        "V2",
+        "V3",
+        "V4",
+        "V5",
+        "V6",
+        "V7",
+        "V8",
+        "V9",
+        "V10",
+        "V11",
+        "V12",
+        "V13",
+        "V14",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19",
+        "V20",
+        "V21",
+        "V22",
+        "V23",
+        "V24",
+        "V25",
+        "V26",
+        "V27",
+        "V28",
+        "Amount",
+        "Class"
+      ],
+      "unique_groups": 283726,
+      "duplicate_rows_beyond_first": 1081,
+      "repeated_groups": 773,
+      "conflicting_label_groups": 0,
+      "groups_spanning_splits": 0,
+      "rows_seen_in_earlier_split": {
+        "train": 0,
+        "selection": 0,
+        "calibration": 0,
+        "evaluation": 0
+      }
+    },
+    "all_predictors": {
+      "columns": [
+        "Time",
+        "V1",
+        "V2",
+        "V3",
+        "V4",
+        "V5",
+        "V6",
+        "V7",
+        "V8",
+        "V9",
+        "V10",
+        "V11",
+        "V12",
+        "V13",
+        "V14",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19",
+        "V20",
+        "V21",
+        "V22",
+        "V23",
+        "V24",
+        "V25",
+        "V26",
+        "V27",
+        "V28",
+        "Amount"
+      ],
+      "unique_groups": 283726,
+      "duplicate_rows_beyond_first": 1081,
+      "repeated_groups": 773,
+      "conflicting_label_groups": 0,
+      "groups_spanning_splits": 0,
+      "rows_seen_in_earlier_split": {
+        "train": 0,
+        "selection": 0,
+        "calibration": 0,
+        "evaluation": 0
+      }
+    },
+    "predictors_without_time": {
+      "columns": [
+        "V1",
+        "V2",
+        "V3",
+        "V4",
+        "V5",
+        "V6",
+        "V7",
+        "V8",
+        "V9",
+        "V10",
+        "V11",
+        "V12",
+        "V13",
+        "V14",
+        "V15",
+        "V16",
+        "V17",
+        "V18",
+        "V19",
+        "V20",
+        "V21",
+        "V22",
+        "V23",
+        "V24",
+        "V25",
+        "V26",
+        "V27",
+        "V28",
+        "Amount"
+      ],
+      "unique_groups": 275663,
+      "duplicate_rows_beyond_first": 9144,
+      "repeated_groups": 5149,
+      "conflicting_label_groups": 0,
+      "groups_spanning_splits": 1128,
+      "rows_seen_in_earlier_split": {
+        "train": 0,
+        "selection": 0,
+        "calibration": 353,
+        "evaluation": 1744
+      }
+    }
+  },
+  "unseen_pattern_evaluation": {
+    "rows": 58198,
+    "frauds": 77,
+    "definition": "Evaluation V1\u2013V28/Amount vector absent from every earlier split; duplicates within evaluation retained."
+  },
+  "assignments": {
+    "path": "data/processed/split-assignments.csv",
+    "rows": 284807,
+    "sha256": "c5077b982af0533ae2dc8f7c86edd0c4ae0c7a1a0ddc4abf8410e9f30cd4ef4a"
+  },
+  "limitations": [
+    "No customer/account identifiers; repeated patterns do not establish shared identity.",
+    "Upstream PCA fitting population and feature availability cannot be independently verified.",
+    "Earlier EDA used labels from all windows; final evaluation is not analytically untouched.",
+    "Only two days of observations; small fraud counts limit precision and temporal generalization."
+  ]
+}
