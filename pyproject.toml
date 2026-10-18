@@ -1,0 +1,21 @@
+[project]
+name = "payment-risk-workbench"
+version = "0.1.0"
+description = "Transaction fraud analysis and cost-based payment risk decisions."
+authors = [{ name = "Tomas Ferrer" }]
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "numpy>=2,<3",
+    "pandas>=2.2,<4",
+    "plotly>=6,<8",
+]
+
+[tool.poetry]
+package-mode = false
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = ">=6,<8"
+nbformat = ">=5,<6"
+seaborn = "^0.13.2"
+matplotlib = "^3.11.2"

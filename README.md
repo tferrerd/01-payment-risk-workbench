@@ -2,9 +2,13 @@
 
 - **Application:** Fraud detection
 - **Portfolio project:** 01 of 15
-- **Status:** Published source data acquired and verified. ML, application and MLOps implementation is planned.
+- **Status:** Published source data acquired and verified; exploratory analysis is in progress. ML, application and MLOps implementation is planned.
 
 Part of [Tomas Ferrer's DS/ML portfolio](https://tomasferrer.com/).
+
+## Implementation framework
+
+Follow the business-to-production workflow of [JuanFeDS/fraud_shipping](https://github.com/JuanFeDS/fraud_shipping), adapted to this dataset and the portfolio lifecycle requirements. The [implementation plan](docs/implementation-plan.md) defines the project charter, seven analysis stages, proposed temporal evaluation protocol, and delivery sequence. Start with exploration and explicit transaction economics; carry the evaluated preprocessing, model, calibration, and policy into the application.
 
 ## Committed CSV dataset
 
@@ -89,6 +93,24 @@ Use the smallest architecture that completes this lifecycle. Select real-time or
 - [ ] Stakeholder memo, ownership/operating record, case study and presentation complete.
 
 ## Current implementation
+
+The [exploration notebook](notebooks/01-exploration.ipynb) covers schema and missingness, duplicates, class imbalance, transaction time and amount distributions, fraud incidence, PCA-feature distributions, and predictor correlations. Executed Seaborn grids and the Spearman heatmap are embedded in the notebook; standalone figures are in `reports/figures/`. These are descriptive findings, not trained-model evaluation or demonstrated business impact.
+
+### Exploration environment
+
+Use Python 3.12 and Poetry 2.5.1 (the setup version used here). From the repository root:
+
+```bash
+poetry env use python3.12
+poetry install
+poetry run python -m ipykernel install --sys-prefix --name payment-risk-workbench --display-name "Python 3.12 (Payment Risk Workbench)"
+```
+
+The environment lives in `.venv/`. In your notebook editor, use **Select Kernel → Python Environments** and select this repository's `.venv/bin/python`. The kernel is also installed inside the environment under the display name above; no global kernel registration is required.
+
+`pyproject.toml` declares NumPy, pandas, Plotly, and the development dependencies ipykernel and nbformat (for Plotly notebook rendering). `poetry.lock` pins their resolved dependencies; commit both files, and use `poetry install` to reproduce the environment. Add statistical, modeling, and chart-export dependencies when those stages need them. Poetry currently manages dependencies in non-package mode; enable packaging when reusable source code is introduced.
+
+### Data acquisition
 
 The source dataset contains 284,807 transactions, 492 fraud labels and 31 columns. Acquisition, checksum verification and initial schema/population/range profiling are implemented; no model has been trained yet.
 
