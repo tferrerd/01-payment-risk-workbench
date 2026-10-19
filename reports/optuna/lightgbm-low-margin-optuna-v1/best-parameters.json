@@ -1,0 +1,14 @@
+{
+  "trial": 36,
+  "parameters": {
+    "n_estimators": 150,
+    "learning_rate": 0.05913233172849386,
+    "num_leaves": 13,
+    "min_child_samples": 145,
+    "reg_alpha": 0.04762944965633453,
+    "reg_lambda": 4.95286033954633,
+    "subsample": 0.8507406617232034,
+    "colsample_bytree": 0.7178911014850163
+  },
+  "training_cv_profit_per_1000": 231.74578919364552
+}

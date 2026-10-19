@@ -15,3 +15,5 @@ Development runs and the frozen stage 07 evaluation have been logged. The histor
 Stage 08 logs economic analysis of existing predictions under `08-low-margin-economics`, with explicit `selection_development` and `evaluation_regression` scope labels. It fits no new model and preserves the stage 07 evaluation.
 
 Inference packaging is logged under `09-inference-candidate`. Repeat registration reuses a version with the same candidate-artifact digest and verifies its reload before assigning the development alias. The API serves the pinned local artifact independently of MLflow availability. See [inference instructions](inference.md).
+
+The executed [Optuna experiment](reports/10-optuna-tuning.md) is logged under `10-optuna-low-margin`: one parent run and 40 child trials. It optimizes training-only grouped three-fold profit, then compares the fixed CV winner with the deployed artifact on selection. The parent stores the tuned artifact and lineage/results; child runs store parameters and fold/pooled metrics. The separate Optuna study database is under `data/processed/optuna/`. It does not replace the registered candidate or change the historical analysis lockfile.

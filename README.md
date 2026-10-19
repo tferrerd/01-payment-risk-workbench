@@ -11,6 +11,7 @@ Fraud-risk scoring, explainable predictions, and payment decisions driven by exp
 [![LightGBM](https://img.shields.io/badge/LightGBM-4.7.0-298729?style=flat-square)](requirements-inference.txt)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.9.1-F7931E?style=flat-square&logo=scikitlearn&logoColor=white)](requirements-inference.txt)
 [![MLflow](https://img.shields.io/badge/MLflow-3.17.1-0194E2?style=flat-square&logo=mlflow&logoColor=white)](docs/mlflow-tracking.md)
+[![Optuna](https://img.shields.io/badge/Optuna-5.0.0-002B5B?style=flat-square&logo=optuna&logoColor=white)](docs/reports/10-optuna-tuning.md)
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.146.0-009688?style=flat-square&logo=fastapi&logoColor=white)](https://payment-risk-workbench.onrender.com/docs)
 [![Uvicorn](https://img.shields.io/badge/Uvicorn-0.54.0-4051B5?style=flat-square)](requirements-inference.txt)
@@ -34,6 +35,7 @@ Part of [Tomas Ferrer's DS/ML portfolio](https://tomasferrer.com/).
 | Data and exploration | NumPy, pandas, Jupyter/ipykernel, Plotly, Seaborn, Matplotlib | Transaction analysis, notebooks, and visualizations. |
 | Modeling and explanations | scikit-learn, LightGBM, joblib, native LightGBM TreeSHAP contributions | Baselines, fraud scoring, saved models, and individual prediction explanations. |
 | Experiment tracking | MLflow, SQLite | Experiment metrics, artifacts, model registry, and lineage. |
+| Hyperparameter optimization | Optuna | Training-only grouped cross-validation under low-margin payment economics; separate from the deployed model. |
 | API and validation | FastAPI, Uvicorn, Pydantic | Validated prediction and explanation endpoints, ASGI serving, and OpenAPI documentation. |
 | Interface | HTML, CSS, JavaScript | Transaction explorer, policy controls, profit charts, and CSV export. |
 | Delivery | Docker, GitHub Actions, Render | Container packaging, automated checks, and the public demo. |
@@ -180,6 +182,8 @@ The executed [calibration notebook](notebooks/06-calibration-and-policy.ipynb) a
 The executed [final notebook](notebooks/07-uncertainty-and-recommendation.ipynb) and [recommendation](docs/reports/07-uncertainty-and-recommendation.md) evaluate the [frozen candidate](config/candidate-freeze.json) on 42,694 payments (71 frauds). Raw Random Forest gains 112.50 simulated profit per 1,000 over approve-all (paired 95% interval: 42.07–201.26), with AP 0.7941. Its profit advantage over logistic regression is inconclusive. This supports an offline/demo prototype under the stated scenario, not a production or future-period claim. Evaluation is now a consumed benchmark; further model changes need fresh confirmation.
 
 The additional [low-margin notebook](notebooks/08-low-margin-payments.ipynb) tests a user-proposed +0.3% legitimate margin / −100% fraud-loss scenario ([report](docs/reports/08-low-margin-payments.md)). The theoretical threshold falls to 0.2991% fraud probability, and LightGBM leads selection under these assumptions. This is a new development hypothesis; its reused evaluation comparison is regression evidence and does not replace stage 07’s frozen result.
+
+The executed [Optuna notebook](notebooks/10-optuna-tuning.ipynb) adds **40 trials × three grouped training folds** ([report](docs/reports/10-optuna-tuning.md)). The objective is simulated low-margin profit at the fixed economic cutoff. Its CV winner achieves selection AP **0.8564** and simulated profit **248.15 per 1,000**, versus **0.8421** and **238.67** for the deployed model. The paired profit-difference interval includes zero; Brier worsens and legitimate cancellations increase. All trials are logged in MLflow. The tuned artifact is a separate development result; the API still serves its original model.
 
 ```bash
 poetry run python scripts/audit_splits.py

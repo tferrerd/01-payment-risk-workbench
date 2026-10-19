@@ -1,0 +1,217 @@
+{
+  "metadata": {
+    "created_at_utc": "2026-10-19T15:08:26.682534+00:00",
+    "study_name": "lightgbm-low-margin-optuna-v1",
+    "objective": "maximize pooled training-only grouped 3-fold out-of-fold simulated profit per 1000",
+    "trials_requested": 40,
+    "sampler": "TPESampler(seed=42, n_startup_trials=10)",
+    "pruner": "NopPruner; all trials complete all folds",
+    "parallel_trials": 1,
+    "model_threads": 4,
+    "seed": 42,
+    "train_rows": 171029,
+    "train_frauds": 297,
+    "threshold": 0.0029910269192422734,
+    "threshold_tuned": false,
+    "calibration_split_used": false,
+    "evaluation_split_scored": false,
+    "posthoc_calibrated": false,
+    "features": [
+      "V1",
+      "V2",
+      "V3",
+      "V4",
+      "V5",
+      "V6",
+      "V7",
+      "V8",
+      "V9",
+      "V10",
+      "V11",
+      "V12",
+      "V13",
+      "V14",
+      "V15",
+      "V16",
+      "V17",
+      "V18",
+      "V19",
+      "V20",
+      "V21",
+      "V22",
+      "V23",
+      "V24",
+      "V25",
+      "V26",
+      "V27",
+      "V28",
+      "Amount",
+      "Time"
+    ],
+    "class_weighting_or_resampling": false,
+    "selection_role": "Post-search development comparison only; no winner or parameter chosen using selection outcomes",
+    "code_sha256": "b36d2419de5be34c5947eeefb27c5f29074d8e56eb9d20ac68859baedb683375",
+    "poetry_lock_sha256": "10ec1af97a7d7eec5c2bfc97daa31f6683cf3088513f92dbf2b034544ccb4d90",
+    "requirements_tuning_sha256": "c03e614e420f66451fa89af45edd6eb5e2ea8b80f12dd2e9b42cc890e1451384",
+    "assignments_sha256": "258a6e6fbcf0e61c635ab28600f6121b4fddf52366bd9c0e0e1225b0df6bc5e9",
+    "protocol_sha256": "81b79e150773f2ce579a4a2c5ecef825d04d75bda1c83787fafb8433b37e8620",
+    "cost_config_sha256": "e53f5336e746a4e97f9eda8a062e341792f4374d5d43fb52a7a83edda0722315",
+    "deployed_artifact_sha256": "05dc10d01d58c57c8b8c6b0ed0d8b042ed143da8e5163ec28914fc8422063b4c",
+    "source_files": [
+      {
+        "path": "data/raw/creditcard_001.csv",
+        "rows": 60000,
+        "sha256": "34ec859f17cf4316a5467606ac26a0f72c82888d057e2a638d7729e62e7ad3af"
+      },
+      {
+        "path": "data/raw/creditcard_002.csv",
+        "rows": 60000,
+        "sha256": "3771fba0b2ef05d25241e90f592143baf87fc1baece6263bd3bc5f8924b4a31b"
+      },
+      {
+        "path": "data/raw/creditcard_003.csv",
+        "rows": 60000,
+        "sha256": "c31849faa788384811dada586b041a4b7b206343d96a7323cfc2aeae8649cbeb"
+      },
+      {
+        "path": "data/raw/creditcard_004.csv",
+        "rows": 60000,
+        "sha256": "d7cae12b932fd1db732d3b29580309cbc621ccb8e99a8bd856584391baf91f39"
+      },
+      {
+        "path": "data/raw/creditcard_005.csv",
+        "rows": 44807,
+        "sha256": "467258e428f60b3f5166b4c6c0a17ee8551ec9bd6fb7a115116ab6346e171773"
+      }
+    ],
+    "git_head_before_run": "58c05338e0502675d5149ded0f8dcf7e34c15ebb",
+    "versions": {
+      "optuna": "5.0.0",
+      "lightgbm": "4.7.0",
+      "scikit-learn": "1.9.1",
+      "mlflow": "3.17.1",
+      "numpy": "2.5.4",
+      "pandas": "3.0.6"
+    },
+    "folds": [
+      {
+        "fold": 0,
+        "fit_rows": 114019,
+        "validation_rows": 57010,
+        "validation_frauds": 99
+      },
+      {
+        "fold": 1,
+        "fit_rows": 114019,
+        "validation_rows": 57010,
+        "validation_frauds": 99
+      },
+      {
+        "fold": 2,
+        "fit_rows": 114020,
+        "validation_rows": 57009,
+        "validation_frauds": 99
+      }
+    ]
+  },
+  "completed_at_utc": "2026-10-19T15:10:19.540414+00:00",
+  "elapsed_seconds": 112.21501045790501,
+  "completed_trials": 40,
+  "mlflow_parent_run_id": "f5f9c2a5736e42ac952f8e67c8ac3c42",
+  "tracking_uri": "sqlite:////Users/tferrer-mbp/reemployment/projects/01-payment-risk-workbench/mlflow.db",
+  "best_trial": 36,
+  "best_parameters": {
+    "n_estimators": 150,
+    "learning_rate": 0.05913233172849386,
+    "num_leaves": 13,
+    "min_child_samples": 145,
+    "reg_alpha": 0.04762944965633453,
+    "reg_lambda": 4.95286033954633,
+    "subsample": 0.8507406617232034,
+    "colsample_bytree": 0.7178911014850163
+  },
+  "best_cv_profit_per_1000": 231.74578919364552,
+  "baseline_cv_profit_per_1000": 210.60261306562046,
+  "selection_results": {
+    "optuna_lightgbm": {
+      "rows": 42632,
+      "frauds": 76,
+      "average_precision": 0.8564445968372816,
+      "roc_auc": 0.9769273056925611,
+      "brier_score": 0.0004680401722230356,
+      "frauds_canceled": 65,
+      "fraud_canceled_recall": 0.8552631578947368,
+      "legitimate_canceled": 371,
+      "legitimate_cancellation_rate": 0.00871792461697528,
+      "cancellation_rate": 0.01022705948583224,
+      "simulated_total_profit": 10578.923910000001,
+      "simulated_profit_per_1000": 248.14514707262154,
+      "maximum_possible_profit": 11272.141500000002,
+      "profit_pct_of_maximum": 93.85016955296382,
+      "total_opportunity_loss": 693.21759
+    },
+    "deployed_lightgbm": {
+      "rows": 42632,
+      "frauds": 76,
+      "average_precision": 0.8420980860849363,
+      "roc_auc": 0.9578349703919542,
+      "brier_score": 0.00043189820268652295,
+      "frauds_canceled": 62,
+      "fraud_canceled_recall": 0.8157894736842105,
+      "legitimate_canceled": 90,
+      "legitimate_cancellation_rate": 0.002114860419212332,
+      "cancellation_rate": 0.0035653968849690375,
+      "simulated_total_profit": 10174.89782,
+      "simulated_profit_per_1000": 238.668085475699,
+      "maximum_possible_profit": 11272.141500000002,
+      "profit_pct_of_maximum": 90.26588088873794,
+      "total_opportunity_loss": 1097.24368
+    }
+  },
+  "selection_uncertainty": {
+    "rows": 42632,
+    "groups": 41349,
+    "repeats": 2000,
+    "seed": 42,
+    "method": "Unstratified paired pattern-group bootstrap, percentile 95% intervals; ratio uses sampled payment count",
+    "policy_intervals": [
+      {
+        "policy": "optuna_lightgbm",
+        "profit_per_1000": 248.14514707262154,
+        "lower_95": 238.0632694061509,
+        "upper_95": 256.48395314571974
+      },
+      {
+        "policy": "deployed_lightgbm",
+        "profit_per_1000": 238.668085475699,
+        "lower_95": 209.30920195471376,
+        "upper_95": 259.63656478445466
+      }
+    ],
+    "paired_differences": [
+      {
+        "candidate": "optuna_lightgbm",
+        "comparator": "deployed_lightgbm",
+        "profit_difference_per_1000": 9.477061596922539,
+        "lower_95": -9.11586840695856,
+        "upper_95": 36.85645574862116,
+        "conclusion": "inconclusive"
+      }
+    ]
+  },
+  "model_promoted": false,
+  "model_artifact": {
+    "path": "models/tuning/lightgbm-low-margin-optuna-v1.joblib",
+    "sha256": "0e48c669d933eece3b78479a00d2f084ae591f15ed26bb6ec85369f8f6aa0d18"
+  },
+  "selection_predictions": {
+    "path": "data/processed/optuna/lightgbm-low-margin-optuna-v1-selection.csv",
+    "sha256": "4df739d18562fe3c80df0604a0bcce2b69c7426fe075eccf205aea70a6b5071b"
+  },
+  "limitations": [
+    "Raw-score economic policies remain provisional; the threshold was held fixed, not tuned.",
+    "CV scores were optimized across trials and are not unbiased performance estimates.",
+    "Selection has prior development/EDA exposure; the paired interval does not account for search uncertainty.",
+    "Calibration and evaluation were not used in this experiment; no independent final-test or production claim."
+  ]
+}

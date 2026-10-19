@@ -1,0 +1,4 @@
+# Additions to the existing Poetry development environment; historical lockfile retained.
+optuna==5.0.0
+colorlog==6.12.0
+tqdm==4.70.1

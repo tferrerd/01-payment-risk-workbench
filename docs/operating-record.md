@@ -1,5 +1,11 @@
 # Operating record
 
+## 2026-10-19 — Optuna development experiment
+
+Ran 40 LightGBM hyperparameter trials with three training-only grouped folds under the existing 0.3% margin scenario. All trials and the parent run finished in MLflow experiment `10-optuna-low-margin`. The fixed CV winner was refitted on training and compared on selection. Point-estimate simulated profit improved from 238.67 to 248.15 per 1,000; its paired 95% difference interval included zero. Brier worsened and legitimate cancellations increased. The [experiment report](reports/10-optuna-tuning.md) and [executed notebook](../notebooks/10-optuna-tuning.ipynb) record the trade-offs.
+
+The original freeze, lockfile, inference dependencies, registered/deployed model artifact, and live service were preserved. No calibration or final evaluation was performed in this experiment, and the tuned model was not promoted. The study and fitted model are local MLflow/Optuna artifacts; compact results are versioned in Git.
+
 ## 2026-10-19 UTC — monitoring and local recovery drill
 
 Implemented aggregate operational monitoring for application release `lightgbm-low-margin-dev-v1-explorer-v2`: request/status counts, bounded latency samples, score/input histograms, structured request logs, and source/release identity. The development LightGBM artifact, feature inputs, and low-margin policy were retained. No training, independent model-quality evaluation, or model promotion occurred.
