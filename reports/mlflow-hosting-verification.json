@@ -1,0 +1,14 @@
+{
+  "tracking_uri": "https://dagshub.com/tferrerd/01-payment-risk-workbench-mlflow.mlflow",
+  "verified_at_utc": "2026-10-19T18:55:21.911352+00:00",
+  "scope": "brief metadata and registry check; exhaustive historical metric/artifact audit stopped at user request",
+  "historical_artifact_checksums": "not completed",
+  "candidate_reload_parity": "not checked remotely",
+  "runs": 93,
+  "latest_metric_records": 2021,
+  "nested_parent_links": 40,
+  "metadata_verified": true,
+  "registered_model": "payment-risk-low-margin",
+  "registered_version": "1",
+  "candidate_alias_verified": true
+}

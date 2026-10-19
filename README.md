@@ -11,6 +11,7 @@ Fraud-risk scoring, explainable predictions, and payment decisions driven by exp
 [![LightGBM](https://img.shields.io/badge/LightGBM-4.7.0-298729?style=flat-square)](requirements-inference.txt)
 [![scikit-learn](https://img.shields.io/badge/scikit--learn-1.9.1-F7931E?style=flat-square&logo=scikitlearn&logoColor=white)](requirements-inference.txt)
 [![MLflow](https://img.shields.io/badge/MLflow-3.17.1-0194E2?style=flat-square&logo=mlflow&logoColor=white)](docs/mlflow-tracking.md)
+[![DagsHub](https://img.shields.io/badge/DagsHub-Private_tracking-FCDD09?style=flat-square&logo=dagshub&logoColor=black)](docs/mlflow-tracking.md)
 [![Optuna](https://img.shields.io/badge/Optuna-5.0.0-002B5B?style=flat-square&logo=optuna&logoColor=white)](docs/reports/10-optuna-tuning.md)
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.146.0-009688?style=flat-square&logo=fastapi&logoColor=white)](https://payment-risk-workbench.onrender.com/docs)
@@ -34,7 +35,7 @@ Part of [Tomas Ferrer's DS/ML portfolio](https://tomasferrer.com/).
 | Environment | Python 3.12, Poetry | Reproducible analysis environment and locked dependencies. |
 | Data and exploration | NumPy, pandas, Jupyter/ipykernel, Plotly, Seaborn, Matplotlib | Transaction analysis, notebooks, and visualizations. |
 | Modeling and explanations | scikit-learn, LightGBM, joblib, native LightGBM TreeSHAP contributions | Baselines, fraud scoring, saved models, and individual prediction explanations. |
-| Experiment tracking | MLflow, SQLite | Experiment metrics, artifacts, model registry, and lineage. |
+| Experiment tracking | MLflow, DagsHub, SQLite | Private hosted experiments and artifacts, model registry, and lineage; local SQLite backup. |
 | Hyperparameter optimization | Optuna | Training-only grouped cross-validation under low-margin payment economics; separate from the deployed model. |
 | API and validation | FastAPI, Uvicorn, Pydantic | Validated prediction and explanation endpoints, ASGI serving, and OpenAPI documentation. |
 | Interface | HTML, CSS, JavaScript | Transaction explorer, policy controls, profit charts, and CSV export. |
@@ -198,7 +199,7 @@ poetry run python -m unittest discover -s tests
 poetry run mlflow server --backend-store-uri sqlite:///mlflow.db --host 127.0.0.1 --port 5050 --workers 1
 ```
 
-The scripts verify source and split checksums, fit on training rows, score selection rows, and record MLflow runs. Open `http://127.0.0.1:5050` after starting the local server. [Tracking setup](docs/mlflow-tracking.md) explains the existing SQLite store and how `MLFLOW_TRACKING_URI` directs future runs to a local or hosted server. Training model and tracking artifacts are excluded from Git; the compact inference candidate and its manifest are explicit deployment exceptions. Final evaluation requires the exact frozen snapshots; rerunning development scripts creates new lineage and must not overwrite the consumed evaluation.
+The scripts verify source and split checksums, fit on training rows, score selection rows, and record MLflow runs. Open `http://127.0.0.1:5050` after starting the local server. [Tracking setup](docs/mlflow-tracking.md) explains private DagsHub hosting, the local SQLite backup, and how per-command credentials direct future runs to the hosted server. Training model and tracking artifacts are excluded from Git; the compact inference candidate and its manifest are explicit deployment exceptions. Final evaluation requires the exact frozen snapshots; rerunning development scripts creates new lineage and must not overwrite the consumed evaluation.
 
 ### Exploration environment
 
