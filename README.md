@@ -153,6 +153,8 @@ Open `http://127.0.0.1:8002/` to search and inspect payments, view live model co
 
 Release `lightgbm-low-margin-dev-v1-explorer-v2` adds aggregate request/error counts, bounded latency samples, and score/Amount/Time histograms at `/metrics`. `/health` identifies the application release and source revision. The [operations runbook](docs/operations.md) covers alert thresholds, limitations, and recovery commands.
 
+The monitoring release is live on Render: [public metrics](https://payment-risk-workbench.onrender.com/metrics), [verification evidence](reports/monitoring-cloud-verification.json), and [release smoke checks](reports/monitoring-cloud-smoke.json).
+
 ```bash
 python3 scripts/check_operations.py --url https://payment-risk-workbench.onrender.com
 ```
