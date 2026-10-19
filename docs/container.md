@@ -36,6 +36,6 @@ The Python base digest and direct Python dependency versions are pinned. Transit
 3. Starts the service with a read-only filesystem and runs the real-model HTTP smoke checks.
 4. Archives the smoke report, release manifest, and inspected image metadata under the commit identifier, then removes the CI container.
 
-The workflow takes effect after the files are committed and pushed; a successful local run is not a GitHub Actions run. The workflow does not publish an image or create a public service. The [Render blueprint](cloud-deployment.md) prepares free-tier hosting, with actual cloud verification still required. Image publishing, monitoring, retraining, and rollback remain subsequent delivery work. The historical evaluation freeze and analytics lockfile are preserved.
+The workflow passed on GitHub for the initial application commit `386be79`; its [run](https://github.com/tferrerd/01-payment-risk-workbench/actions/runs/39186793706) archives verification evidence. The workflow itself does not publish an image or create a public service. The [Render blueprint](cloud-deployment.md) has separately deployed the Free service, with successful public health and inference checks recorded. Image publishing, monitoring, retraining, and rollback remain subsequent delivery work. The historical evaluation freeze and analytics lockfile are preserved.
 
 Implementation references: [Dockerfile instructions](https://docs.docker.com/reference/dockerfile/) and [GitHub Actions artifacts](https://github.com/actions/upload-artifact).

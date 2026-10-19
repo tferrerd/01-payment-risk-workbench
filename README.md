@@ -2,7 +2,9 @@
 
 - **Application:** Fraud detection
 - **Portfolio project:** 01 of 15
-- **Status:** Notebooks 01–08 executed, with a frozen historical-scenario Random Forest evaluation, paired profit intervals, and a separate 0.3%-margin scenario. A registered LightGBM development candidate powers CSV/API inference and a transaction explorer with live TreeSHAP explanations and economic controls. A Docker image and GitHub Actions checks support delivery; a free-tier Render blueprint is prepared. Probability calibration and public deployment remain pending.
+- **Status:** Public demo deployed on Render's Free plan; GitHub container checks and public inference smoke checks passed. A registered LightGBM development candidate powers CSV/API inference, live TreeSHAP explanations, and economic controls. Notebooks 01–08 preserve the historical-scenario evaluation and separate low-margin analysis. Fresh low-margin validation, probability calibration, and remaining operational evidence are still pending.
+
+**[Open the live demo](https://payment-risk-workbench.onrender.com)** · [API reference](https://payment-risk-workbench.onrender.com/docs) · [Deployment evidence](reports/cloud-deployment-verification.json). Free instances can take about a minute to wake after inactivity.
 
 Part of [Tomas Ferrer's DS/ML portfolio](https://tomasferrer.com/).
 
@@ -88,7 +90,7 @@ Use the smallest architecture that completes this lifecycle. Select real-time or
 - [x] Published source acquired, checksum verified and provenance/profile recorded.
 - [x] Data audit, project charter, success criteria and evaluation protocol complete.
 - [x] Baseline and trained ML component evaluated; artifacts and failure analysis saved.
-- [ ] Working application deployed with the exact evaluated model version.
+- [x] Public demo deployed with the exact registered development-candidate snapshot and prediction parity verified; fresh low-margin model-quality confirmation remains open.
 - [ ] Tracking, registry, CI/CD, monitoring, retraining and rollback demonstrated.
 - [ ] Stakeholder memo, ownership/operating record, case study and presentation complete.
 
@@ -104,7 +106,7 @@ poetry run uvicorn payment_risk.api:app --host 127.0.0.1 --port 8000 --workers 1
 
 Open `http://127.0.0.1:8000/docs`. Use `examples/predict-request.json` for a source-derived request. See the [delivery report](docs/reports/09-inference-candidate.md) for parity and validation results.
 
-The [Docker and CI instructions](docs/container.md) provide an isolated explorer/API container, a pinned candidate snapshot, release checksums, and a GitHub Actions build/test workflow. The current explorer container serves locally on port 8002 without the local MLflow database; the original API-only container used port 8001. Public hosting remains pending.
+The [Docker and CI instructions](docs/container.md) provide an isolated explorer/API container, a pinned candidate snapshot, release checksums, and a GitHub Actions build/test workflow. The explorer serves locally on port 8002 and [publicly on Render](https://payment-risk-workbench.onrender.com) without the local MLflow database; the original API-only container used port 8001.
 
 ### Transaction explorer
 

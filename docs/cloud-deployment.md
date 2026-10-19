@@ -1,5 +1,7 @@
 # Render free-tier demo deployment
 
+**Deployed and publicly verified:** [Payment Risk Workbench](https://payment-risk-workbench.onrender.com), service `srv-dbanldcs728c73eqoglg`, on the Free plan in Virginia. The initial deploy `dep-dbanldss728c73eqoi40` used commit `386be79612efb05087e95773c3662cc3334c6fbb`. Public health, saved-prediction parity, all 200 demo payments, input rejection, page/assets, and explanation reconstruction passed. [Deployment evidence](../reports/cloud-deployment-verification.json) records the exact checks and identifiers. The model remains a development candidate.
+
 The selected demo host is Render's free Docker web service. `render.yaml` declares one service, `payment-risk-workbench`, with `plan: free`, the existing Dockerfile, `/health`, and deploys triggered when linked CI checks pass. It declares no database, persistent disk, or paid compute. The schema has been validated against [Render's published blueprint schema](https://render.com/schema/render.yaml.json).
 
 The free service has 512 MB RAM and 0.1 CPU. It sleeps after 15 minutes without inbound traffic and takes about a minute to wake. The workspace includes 750 free instance hours per calendar month; bandwidth and build minutes have separate shared limits. A free compute plan is not an unlimited usage allowance: workspaces with a payment method can incur supplemental usage charges. Keep usage within the workspace's included limits and use the applicable spend controls. These are provider terms checked on 2026-10-18, not a guarantee about an existing account's bill. See [free-tier details](https://render.com/docs/free) and [service plans](https://render.com/docs/blueprint-spec#plan).
@@ -21,7 +23,7 @@ The service listens on `0.0.0.0:8000`; Render's router detects the container's s
 
 ## Verification and release scope
 
-Local Docker verification is implementation evidence. Render deployment is complete only once an actual service URL, deploy identity, health response, and public inference smoke result have been recorded. Connecting an account or validating a blueprint alone does not deploy a service. `reports/explorer-verification.json` records the local checks; a cloud deployment record should be added only after the remote checks pass.
+Local Docker verification is implementation evidence. The initial Render deployment is complete: the actual service URL, deploy identity, health response, and public inference smoke result are recorded in `reports/cloud-deployment-verification.json`. `reports/explorer-verification.json` retains the earlier local checks. No independent model-quality test or production promotion is implied by deployment.
 
 The initial deployment builds on Render from the pinned source/model and base-image digest. It is not claimed to be the identical image built by GitHub Actions: transitive Python dependencies and Debian packages still resolve at build time. Record each deployed image/deploy identity. A later image-publishing step can make CI and deployment consume one immutable registry image.
 
