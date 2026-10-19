@@ -1,0 +1,17 @@
+{
+  "version": "low-margin-payments-v1",
+  "recorded_date": "2026-10-18",
+  "status": "User-proposed economic scenario for stage 08; historical stage 07 economics and freeze are preserved.",
+  "legitimate_margin_fraction": 0.003,
+  "fraud_loss_fraction": 1.0,
+  "cancel_profit": 0.0,
+  "cancel_direct_cost": 0.0,
+  "units": "Same monetary units as source Amount.",
+  "margin_interpretation": "Assumed retained contribution from an approved legitimate payment, equal to 0.3% of Amount; not a measured industry fee or observed dataset outcome.",
+  "tie_policy": "Approve at the break-even probability; approve zero amounts because both actions have zero payoff.",
+  "limitations": [
+    "No extra chargeback fees, recoveries, processing costs or customer lifetime effects are included.",
+    "Existing scores were not trained or selected for this scenario and probability calibration near the new threshold is uncertain.",
+    "The previously consumed evaluation set can only provide a reused regression comparison for this new scenario."
+  ]
+}

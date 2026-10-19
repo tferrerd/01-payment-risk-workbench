@@ -2,13 +2,13 @@
 
 - **Application:** Fraud detection
 - **Portfolio project:** 01 of 15
-- **Status:** Published source data acquired and verified; exploratory analysis is in progress. ML, application and MLOps implementation is planned.
+- **Status:** Notebooks 01–08 executed, with a frozen historical-scenario Random Forest evaluation, paired profit intervals, and a separate 0.3%-margin scenario. A registered LightGBM development candidate powers CSV/API inference and a transaction explorer with live TreeSHAP explanations and economic controls. A Docker image and GitHub Actions checks support delivery; a free-tier Render blueprint is prepared. Probability calibration and public deployment remain pending.
 
 Part of [Tomas Ferrer's DS/ML portfolio](https://tomasferrer.com/).
 
 ## Implementation framework
 
-The project follows a business-to-production workflow adapted to this dataset and the portfolio lifecycle requirements. The [implementation plan](docs/implementation-plan.md) defines the project charter, seven analysis stages, proposed temporal evaluation protocol, and delivery sequence. Start with exploration and explicit transaction economics; carry the evaluated preprocessing, model, calibration, and policy into the application.
+The project follows a business-to-production workflow adapted to this dataset and the portfolio lifecycle requirements. The [implementation plan](docs/implementation-plan.md) defines the project charter, seven analysis stages, random grouped evaluation protocol, and delivery sequence. Start with exploration and explicit transaction economics; carry the evaluated preprocessing, model, calibration, and policy into the application.
 
 ## Committed CSV dataset
 
@@ -86,17 +86,68 @@ Use the smallest architecture that completes this lifecycle. Select real-time or
 ## Completion checklist
 
 - [x] Published source acquired, checksum verified and provenance/profile recorded.
-- [ ] Data audit, project charter, success criteria and evaluation protocol complete.
-- [ ] Baseline and trained ML component evaluated; artifacts and failure analysis saved.
+- [x] Data audit, project charter, success criteria and evaluation protocol complete.
+- [x] Baseline and trained ML component evaluated; artifacts and failure analysis saved.
 - [ ] Working application deployed with the exact evaluated model version.
 - [ ] Tracking, registry, CI/CD, monitoring, retraining and rollback demonstrated.
 - [ ] Stakeholder memo, ownership/operating record, case study and presentation complete.
+
+## Run the development candidate
+
+The reusable [inference package and instructions](docs/inference.md) provide CSV prediction and a local API. It uses the existing LightGBM model with the stage 08 0.3% margin scenario, and is registered as `payment-risk-low-margin` version 1 with the `candidate` alias. This is implementation validation with selection evidence; it is not a promoted production model.
+
+```bash
+poetry run python -m scripts.package_candidate --register
+poetry run python -m payment_risk --input examples/payment-inputs.csv --output data/processed/example-predictions.csv
+poetry run uvicorn payment_risk.api:app --host 127.0.0.1 --port 8000 --workers 1
+```
+
+Open `http://127.0.0.1:8000/docs`. Use `examples/predict-request.json` for a source-derived request. See the [delivery report](docs/reports/09-inference-candidate.md) for parity and validation results.
+
+The [Docker and CI instructions](docs/container.md) provide an isolated explorer/API container, a pinned candidate snapshot, release checksums, and a GitHub Actions build/test workflow. The current explorer container serves locally on port 8002 without the local MLflow database; the original API-only container used port 8001. Public hosting remains pending.
+
+### Transaction explorer
+
+```bash
+poetry run uvicorn payment_risk.explorer:app --host 127.0.0.1 --port 8002 --workers 1
+```
+
+Open `http://127.0.0.1:8002/` to search and inspect payments, view live model contributions, change cost assumptions, compare simulated sample profit, and export decisions. The 200 source-derived selection examples are deliberately enriched with fraud, so sample totals are illustrative. [Explorer usage](docs/explorer.md) explains the distinction between the fixed API policy and browser simulations. [Render deployment](docs/cloud-deployment.md) documents the free-tier configuration and the checks required before claiming a public deployment.
 
 ## Current implementation
 
 The [exploration notebook](notebooks/01-exploration.ipynb) covers schema and missingness, duplicates, class imbalance, transaction time and amount distributions, fraud incidence, PCA-feature distributions, and predictor correlations. Executed Seaborn grids and the Spearman heatmap are embedded in the notebook; standalone figures are in `reports/figures/`. These are descriptive findings, not trained-model evaluation or demonstrated business impact.
 
-The [temporal evaluation protocol](docs/evaluation-protocol.md) records fixed split boundaries, repeated-pattern sensitivity, and the limitation that full-dataset label-aware EDA preceded the split freeze. Reproduce the population audit and local row assignments with `poetry run python scripts/audit_splits.py`. Its versioned configuration and report are committed; processed row assignments are regenerated locally.
+The [random evaluation protocol](docs/evaluation-protocol.md) uses seed 42, targets 60%/15%/10%/15% for training/selection/calibration/evaluation, and keeps identical V1–V28/Amount patterns together. Time remains a predictor. Reproduce the audit and local row assignments with `poetry run python scripts/audit_splits.py`. The protocol documents prior EDA and experiment exposure; evaluation is not analytically untouched.
+
+The executed [baseline notebook](notebooks/02-baseline.ipynb) compares approve-all, a training-p99 amount rule, and logistic regression including Time. See the [baseline report](docs/reports/02-baseline.md) and [approve/cancel profit assumptions](docs/cost-scenario.md). Approved legitimate payments earn 25% of Amount, approved fraud loses 100%, and canceled payments return zero. On selection, logistic regression achieves AP 0.7418 and about 98.99% of the perfect-label maximum profit versus 98.67% for approve-all. These are development scenario results, not realized business impact. The classifier has not been post-hoc calibrated or deployed.
+
+The executed [feature engineering notebook](notebooks/03-feature-engineering.ipynb) audits the 30 available inputs and tests a 24-hour phase transform for Time. The [feature report](docs/reports/03-feature-engineering.md) records the decision to retain the existing inputs after a nearly tied selection comparison.
+
+The executed [experiment notebook](notebooks/04-experiments.ipynb) compares fixed Random Forest and LightGBM models on the same selection payments. See the [comparison report](docs/reports/04-experiments.md). LightGBM has the best average precision (0.8421); Random Forest has the highest provisional profit at the fixed 0.20 threshold. These are development comparisons; later notebooks record calibration checks and frozen evaluation.
+
+The executed [error-analysis notebook](notebooks/05-explanations-and-failures.ipynb) and [report](docs/reports/05-explanations-and-failures.md) trace expensive selection mistakes, fitted tree feature usage, and LightGBM contributions for representative payments. A few high-amount payments dominate simulated losses; stages 06–07 examine calibration and paired uncertainty.
+
+The executed [calibration notebook](notebooks/06-calibration-and-policy.ipynb) and [report](docs/reports/06-calibration-and-policy.md) compare score mappings on grouped calibration folds. Isotonic improves Random Forest Brier within calibration folds but reduces its selection profit; LightGBM retains its raw scores. The 0.20 policy is fixed. Stage 07 records paired uncertainty, a candidate freeze, and final evaluation.
+
+The executed [final notebook](notebooks/07-uncertainty-and-recommendation.ipynb) and [recommendation](docs/reports/07-uncertainty-and-recommendation.md) evaluate the [frozen candidate](config/candidate-freeze.json) on 42,694 payments (71 frauds). Raw Random Forest gains 112.50 simulated profit per 1,000 over approve-all (paired 95% interval: 42.07–201.26), with AP 0.7941. Its profit advantage over logistic regression is inconclusive. This supports an offline/demo prototype under the stated scenario, not a production or future-period claim. Evaluation is now a consumed benchmark; further model changes need fresh confirmation.
+
+The additional [low-margin notebook](notebooks/08-low-margin-payments.ipynb) tests a user-proposed +0.3% legitimate margin / −100% fraud-loss scenario ([report](docs/reports/08-low-margin-payments.md)). The theoretical threshold falls to 0.2991% fraud probability, and LightGBM leads selection under these assumptions. This is a new development hypothesis; its reused evaluation comparison is regression evidence and does not replace stage 07’s frozen result.
+
+```bash
+poetry run python scripts/audit_splits.py
+poetry run python scripts/run_baselines.py
+poetry run python scripts/run_feature_engineering.py
+poetry run python scripts/run_experiments.py
+poetry run python scripts/analyze_failures.py
+poetry run python scripts/run_calibration.py
+poetry run python scripts/run_final_evaluation.py  # checks freeze and reuses cached evaluation
+poetry run python scripts/run_low_margin_scenario.py
+poetry run python -m unittest discover -s tests
+poetry run mlflow server --backend-store-uri sqlite:///mlflow.db --host 127.0.0.1 --port 5050 --workers 1
+```
+
+The scripts verify source and split checksums, fit on training rows, score selection rows, and record MLflow runs. Open `http://127.0.0.1:5050` after starting the local server. [Tracking setup](docs/mlflow-tracking.md) explains the existing SQLite store and how `MLFLOW_TRACKING_URI` directs future runs to a local or hosted server. Training model and tracking artifacts are excluded from Git; the compact inference candidate and its manifest are explicit deployment exceptions. Final evaluation requires the exact frozen snapshots; rerunning development scripts creates new lineage and must not overwrite the consumed evaluation.
 
 ### Exploration environment
 
@@ -110,11 +161,11 @@ poetry run python -m ipykernel install --sys-prefix --name payment-risk-workbenc
 
 The environment lives in `.venv/`. In your notebook editor, use **Select Kernel → Python Environments** and select this repository's `.venv/bin/python`. The kernel is also installed inside the environment under the display name above; no global kernel registration is required.
 
-`pyproject.toml` declares NumPy, pandas, Plotly, and the development dependencies ipykernel and nbformat (for Plotly notebook rendering). `poetry.lock` pins their resolved dependencies; commit both files, and use `poetry install` to reproduce the environment. Add statistical, modeling, and chart-export dependencies when those stages need them. Poetry currently manages dependencies in non-package mode; enable packaging when reusable source code is introduced.
+`pyproject.toml` declares the numerical/modeling dependencies and a development group for notebooks, Seaborn/Matplotlib, notebook execution, and MLflow. `poetry.lock` pins the resolved dependencies; commit both files, and use `poetry install` to reproduce the environment. Poetry retains the historical analysis environment in non-package mode. The importable `payment_risk` package runs from the project root; `requirements-inference.txt` records separate runtime pins without changing the stage 07 lockfile freeze.
 
 ### Data acquisition
 
-The source dataset contains 284,807 transactions, 492 fraud labels and 31 columns. Acquisition, checksum verification and initial schema/population/range profiling are implemented; no model has been trained yet.
+The source dataset contains 284,807 transactions, 492 fraud labels and 31 columns. Acquisition, checksum verification and initial schema/population/range profiling can be reproduced separately from model training.
 
 ```bash
 git clone https://github.com/tferrerd/01-payment-risk-workbench.git

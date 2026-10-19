@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Explore model-driven payment decisions and the economics of fraud. An interactive development demo by Tomas Ferrer.">
+  <title>Payment Risk — Decision Workbench</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23121f36'/%3E%3Cpath d='M8 23V9h8a5 5 0 0 1 0 10h-4' fill='none' stroke='%2365dec4' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/style.css">
+  <script type="module" src="/assets/app.mjs"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a href="/" class="brand" aria-label="Payment Risk home"><span class="brand-mark">P<span>↗</span></span><span>payment<span class="brand-light"> / risk</span></span></a>
+    <nav aria-label="Main navigation"><a href="#workbench" class="active">Workbench</a><a href="#policy">Policy lab</a><a href="#model-notes">Model notes</a></nav>
+    <a href="/docs" class="api-link">API reference <span aria-hidden="true">↗</span></a>
+  </header>
+  <main>
+    <div class="heading-row"><div><p class="eyebrow">DECISION INTELLIGENCE · PROJECT 01</p><h1>Payment decision workbench<span>.</span></h1><p class="intro">Find the risk. Understand the tradeoff. Keep good payments moving.</p></div><span class="status"><i></i><span id="connection-status">Connecting to model…</span></span></div>
+    <div class="notice"><span class="notice-label">DEVELOPMENT DEMO</span><span>Live LightGBM inference · assumed 0.3% margin / 100% fraud loss · scores are uncalibrated.</span></div>
+    <div id="error" class="error" role="alert" hidden></div>
+    <section id="workbench" aria-label="Transaction workbench">
+      <div class="section-heading"><div><h2>Every payment is a decision</h2><p id="sample-description">Loading source-derived selection examples…</p></div><button id="reset" class="text-button">Reset policy ↺</button></div>
+      <div class="metrics" aria-live="polite">
+        <article><span class="metric-label">Payments approved</span><strong id="approved">—</strong><small id="approval-rate">Of the curated demo sample</small></article>
+        <article><span class="metric-label">Fraud amount canceled</span><strong id="fraud-caught">—</strong><small id="fraud-count">Using the published sample labels</small></article>
+        <article><span class="metric-label">Legitimate payments canceled</span><strong id="legit-canceled">—</strong><small id="margin-lost">Assumed margin forgone</small></article>
+        <article class="profit-metric"><span class="metric-label">Simulated sample profit</span><strong id="sample-profit">—</strong><small id="profit-delta">Compared with approve-all</small></article>
+      </div>
+      <div class="workspace">
+        <section class="panel transaction-panel" aria-labelledby="transactions-title">
+          <div class="panel-header"><h3 id="transactions-title">Transactions <span id="row-count" class="count">0</span></h3><button id="export" class="text-button" disabled>Export CSV ↓</button></div>
+          <div class="table-controls"><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Find a payment ID" aria-label="Find a payment ID"></label><label class="sr-only" for="filter">Filter transactions</label><select id="filter"><option value="all">All decisions</option><option value="cancel">Canceled</option><option value="approve">Approved</option><option value="fraud">Labeled fraud</option><option value="legitimate_cancel">Legitimate canceled</option></select><label class="sr-only" for="sort">Sort transactions</label><select id="sort"><option value="risk">Highest risk</option><option value="amount">Highest amount</option><option value="time">Elapsed time</option></select></div>
+          <div class="table-scroll"><table><thead><tr><th>Payment</th><th>Amount</th><th>Risk score</th><th>Label</th><th>Decision</th></tr></thead><tbody id="transactions"><tr><td colspan="5" class="empty">Scoring selection examples with the model…</td></tr></tbody></table></div>
+          <div class="table-footer"><span id="page-info">—</span><div><button id="previous" class="page-button" aria-label="Previous page">←</button><button id="next" class="page-button" aria-label="Next page">→</button></div></div>
+          <p class="sample-note">Curated sample enriched with fraud for exploration. These totals do not estimate population performance. Amounts use the dataset's monetary units.</p>
+        </section>
+        <aside class="panel detail-panel" aria-labelledby="detail-title">
+          <div class="panel-header"><h3 id="detail-title">Payment insight</h3><span class="small-tag">LIVE MODEL</span></div>
+          <div id="detail-empty" class="empty">Select a payment to see its decision.</div>
+          <div id="detail" hidden>
+            <div class="detail-top"><span id="selected-id" class="mono"></span><span id="selected-decision" class="badge"></span></div>
+            <div class="score-block"><span class="metric-label">Model fraud score</span><strong id="selected-score">—</strong><div class="risk-track"><span id="risk-fill"></span></div><small>Model score, not a calibrated risk guarantee</small></div>
+            <dl class="payment-facts"><div><dt>Amount</dt><dd id="selected-amount"></dd></div><div><dt>Elapsed hours</dt><dd id="selected-time"></dd></div><div><dt>Published label</dt><dd id="selected-label"></dd></div><div><dt>Modeled profit if approved</dt><dd id="selected-profit"></dd></div></dl>
+            <div class="explanation-heading"><h4>What moved the model?</h4><span class="small-tag">TREE SHAP</span></div>
+            <p class="explain-intro">Contributions to raw log-odds. Red increases the fraud score; teal decreases it.</p>
+            <div id="contributions" aria-live="polite"></div>
+            <p id="explanation-detail" class="explanation-detail"></p>
+            <p class="fine-print">V1–V28 are anonymized PCA components. Contributions explain the model; they do not identify causes.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+    <section id="policy" class="policy-section" aria-labelledby="policy-title">
+      <div class="section-heading"><div><p class="eyebrow">THE COST OF GETTING IT WRONG</p><h2 id="policy-title">Same model. Different economics.</h2><p>Change the assumptions to see how the decision policy responds.</p></div><span id="policy-state" class="policy-label">Default policy</span></div>
+      <div class="policy-layout"><div class="panel policy-controls"><h3>Policy assumptions</h3><label for="margin">Legitimate margin <span><output id="margin-value">0.30%</output></span></label><input id="margin" type="range" min="0.05" max="25" step="0.05" value="0.3"><p>Profit retained when a legitimate payment is approved.</p><label for="fraud-loss">Fraud loss <span><output id="fraud-loss-value">100%</output></span></label><input id="fraud-loss" type="range" min="5" max="200" step="5" value="100"><p>Loss as a percentage of an approved fraudulent payment.</p><div class="threshold-card"><span>Break-even fraud score</span><strong id="threshold">0.2991%</strong><small>Cancel above margin ÷ (margin + fraud loss).<br>Cancellation returns zero; ties and zero amounts approve.</small></div><p class="fine-print">What-if controls change this browser's simulation. The API's packaged policy stays at 0.3% / 100%.</p></div>
+      <div class="panel chart-panel"><div class="panel-header"><h3>Profit across score cutoffs</h3><div class="chart-legend"><span><i class="line-key"></i>Simulated profit</span><span><i class="line-key dashed"></i>Approve all</span></div></div><svg id="profit-chart" viewBox="0 0 720 270" role="img" aria-label="Simulated sample profit across fraud-score cutoffs"></svg><div class="chart-caption"><span>Fraud-score cutoff · logarithmic scale</span><span id="chart-policy"></span></div><p class="fine-print">Calculated from the curated sample's published labels and your cost assumptions. The break-even rule relies on meaningful probabilities; this model's scores have not been post-hoc calibrated.</p></div></div>
+    </section>
+    <section id="model-notes" class="model-notes"><div><p class="eyebrow">KNOW WHAT YOU'RE LOOKING AT</p><h2>A working model. Clear boundaries.</h2></div><div class="notes-grid"><article><span>01 / Model</span><h3>LightGBM, version 1</h3><p>The existing fitted candidate scores all 30 inputs, including Time and raw Amount. No new fit or final evaluation was performed for this demo.</p></article><article><span>02 / Evidence</span><h3>Selection examples only</h3><p>The sample is intentionally enriched with fraud. Its labels support exploration and cost simulation, not an independent test or a business-impact claim.</p></article><article><span>03 / Status</span><h3>Development candidate</h3><p>Calibration near the low-margin cutoff and fresh validation remain open. This is a portfolio demo, not a live payment authorization system.</p></article></div></section>
+    <footer><span>Built by Tomas Ferrer <span class="footer-dot">·</span> Payment Risk Workbench</span><a href="https://github.com/tferrerd/01-payment-risk-workbench" target="_blank" rel="noopener">View source ↗</a></footer>
+  </main>
+</body>
+</html>

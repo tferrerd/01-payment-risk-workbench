@@ -1,0 +1,11 @@
+{
+  "split": "train",
+  "rows": 171029,
+  "frauds": 297,
+  "scenario": "approve-cancel-profit-v1",
+  "policy": "approve_all",
+  "simulated_total_profit": 3704699.3425000003,
+  "simulated_profit_per_1000": 21661.2348929129,
+  "maximum_possible_profit": 3738907.7424999997,
+  "profit_pct_of_maximum": 99.08506969532426
+}

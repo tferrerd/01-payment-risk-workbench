@@ -1,0 +1,94 @@
+{
+  "metadata": {
+    "evaluated_split": "selection",
+    "train_rows": 171029,
+    "selection_rows": 42632,
+    "evaluation_split_scored": false,
+    "calibration_split_used": false,
+    "code_sha256": "d21f97cf7259ef4a14c9a6dc483dfaf1ebcb4f55559988486ea7c063c4da7c59",
+    "git_head": "9a8618da59546a6523a4b0d4abbe442b83b8363c",
+    "assignments_sha256": "258a6e6fbcf0e61c635ab28600f6121b4fddf52366bd9c0e0e1225b0df6bc5e9",
+    "protocol_sha256": "81b79e150773f2ce579a4a2c5ecef825d04d75bda1c83787fafb8433b37e8620",
+    "cost_config_sha256": "7dda465ab47ce22a71fbbf503278ea08b6b463a25a17be42e590c5acd2d54f26",
+    "baseline_report_sha256": "3c9b64a4f41fd923c849bd9465432eafd819d3038bd04796e59fce1fcca35c38",
+    "source_files": [
+      {
+        "path": "data/raw/creditcard_001.csv",
+        "rows": 60000,
+        "sha256": "34ec859f17cf4316a5467606ac26a0f72c82888d057e2a638d7729e62e7ad3af"
+      },
+      {
+        "path": "data/raw/creditcard_002.csv",
+        "rows": 60000,
+        "sha256": "3771fba0b2ef05d25241e90f592143baf87fc1baece6263bd3bc5f8924b4a31b"
+      },
+      {
+        "path": "data/raw/creditcard_003.csv",
+        "rows": 60000,
+        "sha256": "c31849faa788384811dada586b041a4b7b206343d96a7323cfc2aeae8649cbeb"
+      },
+      {
+        "path": "data/raw/creditcard_004.csv",
+        "rows": 60000,
+        "sha256": "d7cae12b932fd1db732d3b29580309cbc621ccb8e99a8bd856584391baf91f39"
+      },
+      {
+        "path": "data/raw/creditcard_005.csv",
+        "rows": 44807,
+        "sha256": "467258e428f60b3f5166b4c6c0a17ee8551ec9bd6fb7a115116ab6346e171773"
+      }
+    ],
+    "feature_hypothesis": "Add sin/cos of Time mod 86400 to the existing logistic inputs; phase is relative to first transaction, not local clock time."
+  },
+  "baseline_logistic": {
+    "name": "logistic_regression",
+    "mlflow_run_id": "c212ad8ed189467688f5fbcb2f834221",
+    "rows": 42632,
+    "frauds": 76,
+    "average_precision": 0.7417752049603176,
+    "roc_auc": 0.9642857584557313,
+    "brier_score": 0.0008100046539145333,
+    "cancellation_rate": 0.001477763182585851,
+    "fraud_canceled_recall": 0.6578947368421053,
+    "legitimate_cancellation_rate": 0.0003054798383306702,
+    "legitimate_approval_rate": 0.9996945201616694,
+    "simulated_total_profit": 929883.375,
+    "simulated_profit_per_1000": 21811.86374085194,
+    "maximum_possible_profit": 939345.125,
+    "profit_pct_of_maximum": 98.99272911008082,
+    "simulated_total_cost": 9461.75,
+    "simulated_cost_per_1000": 221.94009194970914,
+    "selection_fpr_diagnostic_recall": 0.8157894736842105,
+    "selection_fpr_diagnostic_realized_fpr": 0.0009869348622990883,
+    "selection_fpr_diagnostic_threshold": 0.021470113505703232,
+    "selection_fpr_diagnostic_predict_none": false,
+    "simulated_cost_reduction_vs_approve_all_pct": 24.21105160545132
+  },
+  "time_cycle_logistic": {
+    "name": "logistic_time_cycle",
+    "mlflow_run_id": "485a954ff5704dc5933ecce0bc395598",
+    "rows": 42632,
+    "frauds": 76,
+    "average_precision": 0.7414583061753333,
+    "roc_auc": 0.9616084812086614,
+    "brier_score": 0.0008171918183089536,
+    "cancellation_rate": 0.001477763182585851,
+    "fraud_canceled_recall": 0.6710526315789473,
+    "legitimate_cancellation_rate": 0.00028198138922831093,
+    "legitimate_approval_rate": 0.9997180186107717,
+    "simulated_total_profit": 930009.135,
+    "simulated_profit_per_1000": 21814.813637643085,
+    "maximum_possible_profit": 939345.125,
+    "profit_pct_of_maximum": 99.00611716061229,
+    "simulated_total_cost": 9335.989999999998,
+    "simulated_cost_per_1000": 218.9901951585663,
+    "selection_fpr_diagnostic_recall": 0.8157894736842105,
+    "selection_fpr_diagnostic_realized_fpr": 0.000963436413196729,
+    "selection_fpr_diagnostic_threshold": 0.02216607977692602,
+    "selection_fpr_diagnostic_predict_none": false
+  },
+  "selection_predictions": {
+    "path": "data/processed/feature-selection-predictions.csv",
+    "sha256": "b0c6be7f83d71cbf59b1e3123866aaa275e55f446016de383053877d57f989bf"
+  }
+}

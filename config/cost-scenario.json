@@ -1,0 +1,30 @@
+{
+  "version": "approve-cancel-profit-v1",
+  "status": "User-specified scenario: approved legitimate payments earn 25% of Amount, approved fraud loses 100%, and cancellation has zero direct profit or loss.",
+  "units": "Same monetary units as source Amount; no conversion assumed.",
+  "fraud_loss_fraction": 1.0,
+  "legitimate_margin_fraction": 0.25,
+  "cancel_profit": 0.0,
+  "cancel_direct_cost": 0.0,
+  "actions": [
+    "approve",
+    "cancel"
+  ],
+  "tie_policy": "Approve at exactly zero expected profit; at zero Amount either action has zero profit and approval is used.",
+  "sensitivity": {
+    "fraud_loss_fraction": [
+      0.5,
+      1.0,
+      1.5
+    ],
+    "legitimate_margin_fraction": [
+      0.1,
+      0.25,
+      0.4
+    ]
+  },
+  "limitations": [
+    "No challenge fees, review costs, abandonment, recovery or chargeback fees are included.",
+    "Economics are assumed, not observed outcomes; review/challenge policies are deferred."
+  ]
+}

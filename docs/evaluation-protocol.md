@@ -1,39 +1,38 @@
-# Temporal evaluation protocol — temporal-v1
+# Random evaluation protocol — grouped-random-v1
 
-Recorded 2026-10-18 before model fitting. The versioned configuration is [evaluation.json](../config/evaluation.json). Run `poetry run python scripts/audit_splits.py` to regenerate the [audit report](../reports/duplicate-split-audit.json) and local split assignments in `data/processed/split-assignments.csv`.
+Recorded 2026-10-18. Predict fraud for individual payments using Time, V1–V28, and Amount. Time is an available predictor; it does not determine split assignment.
 
-## Boundaries and roles
+## Allocation
 
-Time is seconds since the first transaction. Boundaries use elapsed hours, not local clock time. Every observation at a boundary enters the later window, so tied timestamps stay together. Source row IDs are zero-based across the five CSV parts; source data-row numbers are one-based within a part, excluding its header.
+Use seed 42 to randomly allocate exact V1–V28/Amount pattern groups, stratifying by their fraud label. Target proportions are 60% training, 15% model selection, 10% calibration, and 15% evaluation. Whole groups are indivisible, so payment proportions and fraud rates are approximate. Conflicting labels within a group are rejected.
 
-| Split | Elapsed hours | Transactions | Frauds | Role |
-|---|---|---:|---:|---|
-| train | [0, 24) | 144,786 | 281 | Fit initial transformations and candidate classifiers. |
-| selection | [24, 32) | 17,739 | 75 | Compare candidates and select hyperparameters using earlier training data. |
-| calibration | [32, 40) | 62,340 | 59 | Fit a preselected calibration method and develop the decision policy for the fixed candidate. |
-| evaluation | [40, end] | 59,942 | 77 | Evaluate the frozen model, calibrator, and policy; do not tune from these results. |
+The prediction unit is a payment. The allocation unit groups identical observed patterns to prevent their repetition across sets; these groups do not identify actual customers or cards. Keep all rows. Each split spans the dataset's elapsed-time range.
 
-These are the boundaries proposed before model experiments; the population audit did not change them. All windows contain both classes. The calibration window has only 59 frauds: calibration and threshold estimates will be uncertain. Use this as a fixed development protocol, not evidence of a workable eight-hour retraining cadence. Actual fraud-label maturation times are unavailable.
+| Split | Payments | Frauds | Fraud rate |
+|---|---:|---:|---:|
+| train | 171,029 | 297 | 0.1737% |
+| selection | 42,632 | 76 | 0.1783% |
+| calibration | 28,452 | 48 | 0.1687% |
+| evaluation | 42,694 | 71 | 0.1663% |
 
-The initial model is fitted on train only. If a classifier is refitted on train plus selection, do that before calibrator fitting; generate fresh calibration scores from that exact refitted artifact. Once fitted, freeze the classifier and calibrator together. Calibration-method or policy searches on the calibration window are development decisions, and must be disclosed. Do not refit any component on evaluation labels before scoring the frozen release.
+See the [configuration](../config/evaluation.json) and [audit](../reports/duplicate-split-audit.json). Reproduce with `poetry run python scripts/audit_splits.py`. Assignments retain source row IDs, file lineage, Time, and pattern group IDs.
 
-## Repeated records and patterns
+## Use of the sets
 
-The audit compares exact parsed numeric values; it does not perform approximate record linkage.
+Fit preprocessing and classifiers on training only. Compare candidates on selection. For the remaining trees, compare identity, sigmoid, temperature, and isotonic score mappings by three grouped calibration folds; fit a selected non-identity mapping on the full calibration set. Compare the resulting fixed-0.20 policies on the reused selection set and quantify paired uncertainty there. Then freeze one model, mapping, and policy before evaluation. Identity means no post-hoc calibration. Any future classifier refit would require fresh calibration scores from that exact refitted artifact. Do not tune using evaluation labels.
 
-- **All columns:** 1,081 repeated rows beyond first occurrences; none span split boundaries.
-- **All predictors, including Time:** the same 1,081 excess repeats; no conflicting labels and no cross-split repeats.
-- **V1–V28 plus Amount, excluding Time:** 9,144 excess repeats, 1,128 groups spanning splits, and no conflicting-label groups. These are repeated feature patterns, not proven duplicates of the same real transaction.
-- **Earlier-pattern overlap:** 353 calibration rows and 1,744 evaluation rows repeat a non-Time predictor vector from an earlier split. All 1,744 evaluation overlaps are legitimate in this snapshot.
+Report average precision, ROC AUC, Brier score, reliability plots, fraud recall, legitimate cancellation rate, and simulated profit under the [approve/cancel scenario](cost-scenario.md). The probability policy cancels above 0.20. A threshold chosen on selection to target 0.1% false positives is a development diagnostic, not an independently evaluated operating point.
 
-Retain all records for the primary evaluation. Report a companion evaluation excluding evaluation rows whose V1–V28/Amount vector appeared in any earlier split: **58,198 rows and 77 frauds**. Report its changed population and denominator explicitly. Keep both candidate and incumbent on the same rows. This sensitivity does not remove duplicates internal to evaluation or establish independence between customers; no customer IDs exist.
+## Duplicate audit and limitations
 
-Persist row-level overlap flags and source lineage so later code uses the same masks. Do not group repeated patterns by moving future rows into training. If the training duplicate treatment changes, document it as an experiment; do not silently alter the frozen evaluation population.
+There are 1,081 excess exact repeats and 9,144 excess V1–V28/Amount repeats when Time is ignored. There are no conflicting labels or cross-split pattern groups. Every evaluation pattern is absent from training, selection, and calibration; a separate unseen-pattern subset is unnecessary.
 
-## Evaluation contract and limitations
+Full-dataset label-aware EDA and earlier chronological baseline experiments preceded this revised protocol. Evaluation is reserved from subsequent fitting and tuning but is not an untouched analytical holdout. This random comparison estimates performance on held-out payments from the same two-day population. Future-period performance, unseen-customer performance, and production impact require separate evidence. Upstream PCA fitting provenance and fraud-label delays are unavailable.
 
-Report average precision (the explicitly named PR summary), recall at a development-selected threshold targeting 0.1% false positives, the realized false-positive rate, Brier score, reliability plots, and simulated policy cost. Include record counts, fraud counts, time windows, comparator, costs, and capacity in each report. Choose economics before policy selection; business assumptions remain to be specified.
+For paired uncertainty estimates, resample pattern groups together and compare policies on the same sampled payments. Record the resampling seed and interval method. The short dataset cannot establish long-term drift robustness.
 
-**Exposure disclosure:** full-dataset label-aware plots were produced before this protocol was frozen. The evaluation window is therefore reserved from subsequent fitting and tuning, but cannot be described as an untouched analytical holdout. A newly acquired later labeled dataset is needed for genuinely fresh confirmation. Do not erase this limitation after a favorable result.
+## Evaluation status — candidate-v1
 
-Upstream PCA fitting provenance and decision-time availability cannot be independently verified. The dataset has two days of observations, few frauds, and unknown label delays. Metrics will not establish long-term robustness or actual business impact. Once evaluation results influence a change, that window becomes a regression benchmark for the revised model, rather than a fresh final test.
+Stage 07 froze raw Random Forest with identity mapping and the fixed 0.20 economic threshold before scoring evaluation. The [manifest](../config/candidate-freeze.json) binds the candidate, comparator snapshots, lineage, bootstrap plan, and economic sensitivities. The [final report](reports/07-uncertainty-and-recommendation.md) records all 42,694 evaluation payments and the primary paired profit interval. Evaluation is now consumed; result-informed changes must treat it as a regression benchmark and obtain new labeled data for fresh confirmation. The cached evaluator refuses changed frozen inputs.
+
+Stage 08 adds a later user-proposed 0.3% margin scenario. It changes neither the split nor the historical freeze. Existing evaluation scores are only repriced as a consumed regression benchmark; they do not provide a new independent final test for this hypothesis.

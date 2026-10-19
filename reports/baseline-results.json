@@ -1,0 +1,141 @@
+{
+  "metadata": {
+    "evaluated_split": "selection",
+    "train_rows": 171029,
+    "train_frauds": 297,
+    "selection_rows": 42632,
+    "selection_frauds": 76,
+    "evaluation_split_scored": false,
+    "calibration_split_used": false,
+    "split_strategy": "Seeded random allocation of label-stratified exact-pattern groups",
+    "random_seed": 42,
+    "training_prior": 0.0017365476030380812,
+    "amount_rule_threshold_from_train_p99": 1006.9080000000002,
+    "code_sha256": "7f4dd249fcc1269ab3c96f4c0a09c69c698e1261a1586f814b9e42998f3e2556",
+    "git_head": "9a8618da59546a6523a4b0d4abbe442b83b8363c",
+    "protocol_sha256": "81b79e150773f2ce579a4a2c5ecef825d04d75bda1c83787fafb8433b37e8620",
+    "cost_config_sha256": "7dda465ab47ce22a71fbbf503278ea08b6b463a25a17be42e590c5acd2d54f26",
+    "assignments_sha256": "258a6e6fbcf0e61c635ab28600f6121b4fddf52366bd9c0e0e1225b0df6bc5e9",
+    "poetry_lock_sha256": "10ec1af97a7d7eec5c2bfc97daa31f6683cf3088513f92dbf2b034544ccb4d90",
+    "source_files": [
+      {
+        "path": "data/raw/creditcard_001.csv",
+        "rows": 60000,
+        "sha256": "34ec859f17cf4316a5467606ac26a0f72c82888d057e2a638d7729e62e7ad3af"
+      },
+      {
+        "path": "data/raw/creditcard_002.csv",
+        "rows": 60000,
+        "sha256": "3771fba0b2ef05d25241e90f592143baf87fc1baece6263bd3bc5f8924b4a31b"
+      },
+      {
+        "path": "data/raw/creditcard_003.csv",
+        "rows": 60000,
+        "sha256": "c31849faa788384811dada586b041a4b7b206343d96a7323cfc2aeae8649cbeb"
+      },
+      {
+        "path": "data/raw/creditcard_004.csv",
+        "rows": 60000,
+        "sha256": "d7cae12b932fd1db732d3b29580309cbc621ccb8e99a8bd856584391baf91f39"
+      },
+      {
+        "path": "data/raw/creditcard_005.csv",
+        "rows": 44807,
+        "sha256": "467258e428f60b3f5166b4c6c0a17ee8551ec9bd6fb7a115116ab6346e171773"
+      }
+    ],
+    "versions": {
+      "numpy": "2.5.4",
+      "pandas": "3.0.6",
+      "scikit-learn": "1.9.1",
+      "joblib": "1.6.0",
+      "mlflow": "3.17.1"
+    },
+    "notes": [
+      "Descriptive selection results, not final evaluation or rollout impact.",
+      "Logistic scores have not been post-hoc calibrated; cost-policy results are provisional.",
+      "FPR diagnostic thresholds are chosen and assessed on selection itself; not an independent estimate.",
+      "No class weighting, resampling, tuning, challenge/review action, or calibration in this initial comparison.",
+      "The binary approve/cancel policy has no review-capacity constraint.",
+      "Exact repeats and amounts above p99 remain in the fitted/scored populations."
+    ]
+  },
+  "results": [
+    {
+      "name": "approve_all",
+      "mlflow_run_id": "2b51652706c248b09d417cbf51288229",
+      "rows": 42632,
+      "frauds": 76,
+      "average_precision": 0.0017826984424845187,
+      "roc_auc": 0.5,
+      "brier_score": 0.001779522558647664,
+      "cancellation_rate": 0.0,
+      "fraud_canceled_recall": 0.0,
+      "legitimate_cancellation_rate": 0.0,
+      "legitimate_approval_rate": 1.0,
+      "simulated_total_profit": 926860.7849999999,
+      "simulated_profit_per_1000": 21740.96418183524,
+      "maximum_possible_profit": 939345.125,
+      "profit_pct_of_maximum": 98.67095280874533,
+      "simulated_total_cost": 12484.34,
+      "simulated_cost_per_1000": 292.83965096641026,
+      "selection_fpr_diagnostic_recall": 0.0,
+      "selection_fpr_diagnostic_realized_fpr": 0.0,
+      "selection_fpr_diagnostic_threshold": null,
+      "selection_fpr_diagnostic_predict_none": true,
+      "simulated_cost_reduction_vs_approve_all_pct": 0.0
+    },
+    {
+      "name": "amount_rule",
+      "mlflow_run_id": "7eee282cfbd8415f869806a1a27f770c",
+      "rows": 42632,
+      "frauds": 76,
+      "average_precision": 0.0030903288730728578,
+      "roc_auc": 0.4920493306652287,
+      "brier_score": null,
+      "cancellation_rate": 0.009546819290673672,
+      "fraud_canceled_recall": 0.02631578947368421,
+      "legitimate_cancellation_rate": 0.009516871886455494,
+      "legitimate_approval_rate": 0.9904831281135446,
+      "simulated_total_profit": 737502.7325,
+      "simulated_profit_per_1000": 17299.275954681932,
+      "maximum_possible_profit": 939345.125,
+      "profit_pct_of_maximum": 78.5124351925497,
+      "simulated_total_cost": 201842.39250000002,
+      "simulated_cost_per_1000": 4734.527878119723,
+      "selection_fpr_diagnostic_recall": 0.0,
+      "selection_fpr_diagnostic_realized_fpr": 0.0,
+      "selection_fpr_diagnostic_threshold": null,
+      "selection_fpr_diagnostic_predict_none": true,
+      "simulated_cost_reduction_vs_approve_all_pct": -1516.764622719343
+    },
+    {
+      "name": "logistic_regression",
+      "mlflow_run_id": "c212ad8ed189467688f5fbcb2f834221",
+      "rows": 42632,
+      "frauds": 76,
+      "average_precision": 0.7417752049603176,
+      "roc_auc": 0.9642857584557313,
+      "brier_score": 0.0008100046539145333,
+      "cancellation_rate": 0.001477763182585851,
+      "fraud_canceled_recall": 0.6578947368421053,
+      "legitimate_cancellation_rate": 0.0003054798383306702,
+      "legitimate_approval_rate": 0.9996945201616694,
+      "simulated_total_profit": 929883.375,
+      "simulated_profit_per_1000": 21811.86374085194,
+      "maximum_possible_profit": 939345.125,
+      "profit_pct_of_maximum": 98.99272911008082,
+      "simulated_total_cost": 9461.75,
+      "simulated_cost_per_1000": 221.94009194970914,
+      "selection_fpr_diagnostic_recall": 0.8157894736842105,
+      "selection_fpr_diagnostic_realized_fpr": 0.0009869348622990883,
+      "selection_fpr_diagnostic_threshold": 0.021470113505703232,
+      "selection_fpr_diagnostic_predict_none": false,
+      "simulated_cost_reduction_vs_approve_all_pct": 24.21105160545132
+    }
+  ],
+  "selection_predictions": {
+    "path": "data/processed/baseline-selection-predictions.csv",
+    "sha256": "0b23cb2621b55994f44be5f2627070756ecc2506e943c1b2c7768c2c7b1e807f"
+  }
+}

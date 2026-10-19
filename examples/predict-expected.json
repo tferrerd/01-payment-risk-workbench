@@ -1,0 +1,32 @@
+[
+  {
+    "fraud_probability": 4.3098658778367404e-06,
+    "decision": "approve",
+    "modeled_approval_profit": 0.010994135340605024,
+    "modeled_policy_profit": 0.010994135340605024,
+    "model_id": "lightgbm-low-margin-dev-v1",
+    "scenario": "low-margin-payments-v1",
+    "model_status": "development_candidate",
+    "probability_calibrated": false
+  },
+  {
+    "fraud_probability": 0.9882171247404734,
+    "decision": "cancel",
+    "modeled_approval_profit": -237.0944535431987,
+    "modeled_policy_profit": 0.0,
+    "model_id": "lightgbm-low-margin-dev-v1",
+    "scenario": "low-margin-payments-v1",
+    "model_status": "development_candidate",
+    "probability_calibrated": false
+  },
+  {
+    "fraud_probability": 9.238769521283965e-07,
+    "decision": "approve",
+    "modeled_approval_profit": 0.0,
+    "modeled_policy_profit": 0.0,
+    "model_id": "lightgbm-low-margin-dev-v1",
+    "scenario": "low-margin-payments-v1",
+    "model_status": "development_candidate",
+    "probability_calibrated": false
+  }
+]

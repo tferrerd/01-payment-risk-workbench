@@ -12,7 +12,11 @@ data/raw/*
 !data/raw/masks/
 data/interim/*
 data/processed/*
-models/
+models/*
+!models/candidates/
+models/candidates/*
+!models/candidates/lightgbm-low-margin-dev-v1.joblib
+!models/candidates/lightgbm-low-margin-dev-v1.json
 mlruns/
 mlflow.db
 *.part

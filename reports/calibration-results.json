@@ -1,0 +1,280 @@
+{
+  "metadata": {
+    "protocol": "grouped-random-v1",
+    "calibration_method_selection": "minimum grouped 3-fold calibration Brier; identity, sigmoid, temperature, isotonic",
+    "calibration_rows": 28452,
+    "calibration_frauds": 48,
+    "selection_rows": 42632,
+    "selection_frauds": 76,
+    "training_split_used_for_calibrator": false,
+    "evaluation_split_scored": false,
+    "code_sha256": "d67f651865cb66949fdda8fd78905f81b8913447acb6ed5462cd5ce76d1e6f7e",
+    "git_head": "9a8618da59546a6523a4b0d4abbe442b83b8363c",
+    "assignment_sha256": "258a6e6fbcf0e61c635ab28600f6121b4fddf52366bd9c0e0e1225b0df6bc5e9",
+    "protocol_sha256": "81b79e150773f2ce579a4a2c5ecef825d04d75bda1c83787fafb8433b37e8620",
+    "cost_config_sha256": "7dda465ab47ce22a71fbbf503278ea08b6b463a25a17be42e590c5acd2d54f26",
+    "experiment_report_sha256": "80a0eddc58ce55f919b25ef89f6fc78ef2163573d4e337b51769f74476a56739",
+    "poetry_lock_sha256": "10ec1af97a7d7eec5c2bfc97daa31f6683cf3088513f92dbf2b034544ccb4d90",
+    "source_files": [
+      {
+        "path": "data/raw/creditcard_001.csv",
+        "rows": 60000,
+        "sha256": "34ec859f17cf4316a5467606ac26a0f72c82888d057e2a638d7729e62e7ad3af"
+      },
+      {
+        "path": "data/raw/creditcard_002.csv",
+        "rows": 60000,
+        "sha256": "3771fba0b2ef05d25241e90f592143baf87fc1baece6263bd3bc5f8924b4a31b"
+      },
+      {
+        "path": "data/raw/creditcard_003.csv",
+        "rows": 60000,
+        "sha256": "c31849faa788384811dada586b041a4b7b206343d96a7323cfc2aeae8649cbeb"
+      },
+      {
+        "path": "data/raw/creditcard_004.csv",
+        "rows": 60000,
+        "sha256": "d7cae12b932fd1db732d3b29580309cbc621ccb8e99a8bd856584391baf91f39"
+      },
+      {
+        "path": "data/raw/creditcard_005.csv",
+        "rows": 44807,
+        "sha256": "467258e428f60b3f5166b4c6c0a17ee8551ec9bd6fb7a115116ab6346e171773"
+      }
+    ],
+    "versions": {
+      "scikit-learn": "1.9.1",
+      "lightgbm": "4.7.0",
+      "mlflow": "3.17.1"
+    },
+    "notes": [
+      "Base classifiers were fitted on training only and frozen during post-hoc calibration.",
+      "Calibration method selected by grouped 3-fold out-of-fold Brier on calibration only; identity means no post-hoc mapping.",
+      "Full-calibration diagnostics are in-sample for fitted mappings.",
+      "Selection results reuse a set already used for model comparison and are development evidence.",
+      "The 0.20 policy threshold follows fixed assumed economics; it was not tuned.",
+      "Evaluation labels remain unused; no production impact claim."
+    ]
+  },
+  "results": [
+    {
+      "name": "random_forest",
+      "chosen_method": "isotonic",
+      "calibration_cv": [
+        {
+          "method": "identity",
+          "out_of_fold_brier": 0.0003869412006288745,
+          "out_of_fold_log_loss": 0.007426795948789814
+        },
+        {
+          "method": "sigmoid",
+          "out_of_fold_brier": 0.00041581457250869087,
+          "out_of_fold_log_loss": 0.0028846759278373037
+        },
+        {
+          "method": "temperature",
+          "out_of_fold_brier": 0.0004213036719550502,
+          "out_of_fold_log_loss": 0.0057979706728282406
+        },
+        {
+          "method": "isotonic",
+          "out_of_fold_brier": 0.0003339526621911656,
+          "out_of_fold_log_loss": 0.003650581563182053
+        }
+      ],
+      "mlflow_run_id": "4c0dc02c2cba426d8b5edac9599be345",
+      "raw_model_sha256": "1524c639cbbd9b8d0fe4cf01578c7e06240e3bff29283369d06ca971e657743e",
+      "policy_model_sha256": "3f41ffce7ad47ca2f6eb60852d2c096a54133448c20f99cbd5d1e2665fb63083",
+      "selection_raw": {
+        "name": "random_forest",
+        "mlflow_run_id": "3a37ea51d38442459cbbd9270df900cc",
+        "parameters": {
+          "bootstrap": true,
+          "ccp_alpha": 0.0,
+          "class_weight": null,
+          "criterion": "gini",
+          "max_depth": null,
+          "max_features": "sqrt",
+          "max_leaf_nodes": null,
+          "max_samples": null,
+          "min_impurity_decrease": 0.0,
+          "min_samples_leaf": 2,
+          "min_samples_split": 2,
+          "min_weight_fraction_leaf": 0.0,
+          "monotonic_cst": null,
+          "n_estimators": 200,
+          "n_jobs": 4,
+          "oob_score": false,
+          "random_state": 42,
+          "verbose": 0,
+          "warm_start": false
+        },
+        "rows": 42632,
+        "frauds": 76,
+        "average_precision": 0.8365462896743853,
+        "roc_auc": 0.9569925819106465,
+        "brier_score": 0.0004658388054921877,
+        "cancellation_rate": 0.0015950459748545693,
+        "fraud_canceled_recall": 0.7894736842105263,
+        "legitimate_cancellation_rate": 0.00018798759281887396,
+        "legitimate_approval_rate": 0.9998120124071811,
+        "simulated_total_profit": 931144.4225,
+        "simulated_profit_per_1000": 21841.44357524864,
+        "maximum_possible_profit": 939345.125,
+        "profit_pct_of_maximum": 99.12697662640235,
+        "simulated_total_cost": 8200.7025,
+        "simulated_cost_per_1000": 192.36025755301182,
+        "selection_fpr_diagnostic_recall": 0.8289473684210527,
+        "selection_fpr_diagnostic_realized_fpr": 0.00014099069461415546,
+        "selection_fpr_diagnostic_threshold": 0.30541666666666667,
+        "selection_fpr_diagnostic_predict_none": false
+      },
+      "selection_policy": {
+        "rows": 42632,
+        "frauds": 76,
+        "average_precision": 0.8070696264086108,
+        "roc_auc": 0.9143782990585779,
+        "brier_score": 0.0004974232903429621,
+        "cancellation_rate": 0.0013604803903171326,
+        "fraud_canceled_recall": 0.7105263157894737,
+        "legitimate_cancellation_rate": 9.399379640943698e-05,
+        "legitimate_approval_rate": 0.9999060062035906,
+        "simulated_total_profit": 929509.1074999999,
+        "simulated_profit_per_1000": 21803.084713360855,
+        "maximum_possible_profit": 939345.125,
+        "profit_pct_of_maximum": 98.95288566063512,
+        "simulated_total_cost": 9836.0175,
+        "simulated_cost_per_1000": 230.71911944079565,
+        "selection_fpr_diagnostic_recall": 0.8289473684210527,
+        "selection_fpr_diagnostic_realized_fpr": 0.00014099069461415546,
+        "selection_fpr_diagnostic_threshold": 0.16666666666666666,
+        "selection_fpr_diagnostic_predict_none": false
+      },
+      "calibration_descriptive": {
+        "raw_brier": 0.0003869412006288745,
+        "calibrated_brier": 0.00030095151014620304,
+        "raw_log_loss": 0.007426795948789814,
+        "calibrated_log_loss": 0.002154168382336391,
+        "observed_fraud_rate": 0.001687051876845213,
+        "mean_calibrated_probability": 0.001687051876845213
+      }
+    },
+    {
+      "name": "lightgbm",
+      "chosen_method": "identity",
+      "calibration_cv": [
+        {
+          "method": "identity",
+          "out_of_fold_brier": 0.0005770080134499255,
+          "out_of_fold_log_loss": 0.008305368899143085
+        },
+        {
+          "method": "sigmoid",
+          "out_of_fold_brier": 0.0008370486630736472,
+          "out_of_fold_log_loss": 0.00853459815248725
+        },
+        {
+          "method": "temperature",
+          "out_of_fold_brier": 0.0005782401961366117,
+          "out_of_fold_log_loss": 0.00817017017221324
+        },
+        {
+          "method": "isotonic",
+          "out_of_fold_brier": 0.0006590970701951103,
+          "out_of_fold_log_loss": 0.009151851539336798
+        }
+      ],
+      "mlflow_run_id": "572e9f45b302403da17fd6107f93a470",
+      "raw_model_sha256": "641853d23af66f6f7eab7f8a5fcaf98561ec96924f22941eaee055c2d639b831",
+      "policy_model_sha256": "b84707878f4875444878b1acb6f9695e21646d7c8d6b0749088343aa55d3ea70",
+      "selection_raw": {
+        "name": "lightgbm",
+        "mlflow_run_id": "cc44ad874ef24f78b9fcbafd2b1a2195",
+        "parameters": {
+          "boosting_type": "gbdt",
+          "class_weight": null,
+          "colsample_bytree": 1.0,
+          "importance_type": "split",
+          "learning_rate": 0.05,
+          "max_depth": -1,
+          "min_child_samples": 40,
+          "min_child_weight": 0.001,
+          "min_split_gain": 0.0,
+          "n_estimators": 200,
+          "n_jobs": 4,
+          "num_leaves": 15,
+          "objective": null,
+          "random_state": 42,
+          "reg_alpha": 0.0,
+          "reg_lambda": 0.0,
+          "subsample": 1.0,
+          "subsample_for_bin": 200000,
+          "subsample_freq": 0,
+          "verbosity": -1
+        },
+        "rows": 42632,
+        "frauds": 76,
+        "average_precision": 0.8420980860849363,
+        "roc_auc": 0.9578349703919542,
+        "brier_score": 0.00043189820268652295,
+        "cancellation_rate": 0.001548132857947082,
+        "fraud_canceled_recall": 0.7894736842105263,
+        "legitimate_cancellation_rate": 0.00014099069461415546,
+        "legitimate_approval_rate": 0.9998590093053858,
+        "simulated_total_profit": 930629.3825,
+        "simulated_profit_per_1000": 21829.362509382623,
+        "maximum_possible_profit": 939345.125,
+        "profit_pct_of_maximum": 99.0721469385387,
+        "simulated_total_cost": 8715.7425,
+        "simulated_cost_per_1000": 204.44132341902795,
+        "selection_fpr_diagnostic_recall": 0.868421052631579,
+        "selection_fpr_diagnostic_realized_fpr": 0.0007519503712754958,
+        "selection_fpr_diagnostic_threshold": 0.017706756579795237,
+        "selection_fpr_diagnostic_predict_none": false
+      },
+      "selection_policy": {
+        "rows": 42632,
+        "frauds": 76,
+        "average_precision": 0.8420980860849363,
+        "roc_auc": 0.9578349703919542,
+        "brier_score": 0.00043189820268652295,
+        "cancellation_rate": 0.001548132857947082,
+        "fraud_canceled_recall": 0.7894736842105263,
+        "legitimate_cancellation_rate": 0.00014099069461415546,
+        "legitimate_approval_rate": 0.9998590093053858,
+        "simulated_total_profit": 930629.3825,
+        "simulated_profit_per_1000": 21829.362509382623,
+        "maximum_possible_profit": 939345.125,
+        "profit_pct_of_maximum": 99.0721469385387,
+        "simulated_total_cost": 8715.7425,
+        "simulated_cost_per_1000": 204.44132341902795,
+        "selection_fpr_diagnostic_recall": 0.868421052631579,
+        "selection_fpr_diagnostic_realized_fpr": 0.0007519503712754958,
+        "selection_fpr_diagnostic_threshold": 0.017706756579795237,
+        "selection_fpr_diagnostic_predict_none": false
+      },
+      "calibration_descriptive": {
+        "raw_brier": 0.0005770080134499255,
+        "calibrated_brier": 0.0005770080134499255,
+        "raw_log_loss": 0.008305368899143085,
+        "calibrated_log_loss": 0.008305368899143085,
+        "observed_fraud_rate": 0.001687051876845213,
+        "mean_calibrated_probability": 0.0014863746050902342
+      }
+    }
+  ],
+  "method_selected_policy_profit_leader": "lightgbm",
+  "all_development_policy_profit_leader": {
+    "model": "random_forest",
+    "variant": "raw"
+  },
+  "candidate_frozen": false,
+  "selection_predictions": {
+    "path": "data/processed/calibrated-selection-predictions.csv",
+    "sha256": "a6b3ca986075cbcc3609923c2942fc0058fc361190e1f382b41f31b49d620ed5"
+  },
+  "calibration_descriptive_predictions": {
+    "path": "data/processed/calibration-descriptive-predictions.csv",
+    "sha256": "216bf9faf43ef0815a69f400d8e9ef391e122ae8dd8fe3f957f48eda13ac2f00"
+  }
+}

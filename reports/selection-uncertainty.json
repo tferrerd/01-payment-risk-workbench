@@ -1,0 +1,92 @@
+{
+  "rows": 42632,
+  "groups": 41349,
+  "repeats": 2000,
+  "seed": 42,
+  "method": "Unstratified paired pattern-group bootstrap, percentile 95% intervals; ratio uses sampled payment count",
+  "policy_intervals": [
+    {
+      "policy": "amount_rule",
+      "profit_per_1000": 17299.275954681932,
+      "lower_95": 16975.97643192825,
+      "upper_95": 17637.79205531429
+    },
+    {
+      "policy": "approve_all",
+      "profit_per_1000": 21740.96418183524,
+      "lower_95": 21085.84867128015,
+      "upper_95": 22443.068956363757
+    },
+    {
+      "policy": "logistic_regression",
+      "profit_per_1000": 21811.86374085194,
+      "lower_95": 21225.59035908633,
+      "upper_95": 22409.502986800853
+    },
+    {
+      "policy": "random_forest_raw",
+      "profit_per_1000": 21841.44357524864,
+      "lower_95": 21260.552392715566,
+      "upper_95": 22447.31859709341
+    },
+    {
+      "policy": "random_forest_isotonic",
+      "profit_per_1000": 21803.084713360855,
+      "lower_95": 21218.309014470145,
+      "upper_95": 22409.67718655776
+    },
+    {
+      "policy": "lightgbm_raw",
+      "profit_per_1000": 21829.362509382623,
+      "lower_95": 21252.35506588225,
+      "upper_95": 22424.897799465136
+    }
+  ],
+  "paired_differences": [
+    {
+      "candidate": "random_forest_raw",
+      "comparator": "amount_rule",
+      "profit_difference_per_1000": 4542.167620566706,
+      "lower_95": 4021.3723890353194,
+      "upper_95": 5111.631263505893,
+      "conclusion": "positive"
+    },
+    {
+      "candidate": "random_forest_raw",
+      "comparator": "approve_all",
+      "profit_difference_per_1000": 100.47939341339952,
+      "lower_95": -299.61356208916357,
+      "upper_95": 365.5887434934926,
+      "conclusion": "inconclusive"
+    },
+    {
+      "candidate": "random_forest_raw",
+      "comparator": "logistic_regression",
+      "profit_difference_per_1000": 29.57983439669988,
+      "lower_95": 4.995366769757129,
+      "upper_95": 59.858718006367404,
+      "conclusion": "positive"
+    },
+    {
+      "candidate": "random_forest_raw",
+      "comparator": "random_forest_isotonic",
+      "profit_difference_per_1000": 38.35886188778386,
+      "lower_95": -3.143912409273253,
+      "upper_95": 100.43861980986902,
+      "conclusion": "inconclusive"
+    },
+    {
+      "candidate": "random_forest_raw",
+      "comparator": "lightgbm_raw",
+      "profit_difference_per_1000": 12.081065866015706,
+      "lower_95": -12.569245707637402,
+      "upper_95": 50.57204127786381,
+      "conclusion": "inconclusive"
+    }
+  ],
+  "split": "selection",
+  "candidate_by_point_estimate": "random_forest_raw",
+  "selection_rule": "Maximum observed primary-scenario selection profit among fitted learned alternatives; intervals describe uncertainty and do not prove superiority",
+  "frauds": 76,
+  "limitations": "Conditional on fixed models and observed exact-pattern groups; does not include training, method-selection, or repeated-development-search uncertainty."
+}

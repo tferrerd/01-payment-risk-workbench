@@ -1,0 +1,23 @@
+{
+  "checked_at_utc": "2026-10-19T00:54:58.019739+00:00",
+  "url": "http://127.0.0.1:8000",
+  "rows": 3,
+  "model_id": "lightgbm-low-margin-dev-v1",
+  "artifact_sha256": "05dc10d01d58c57c8b8c6b0ed0d8b042ed143da8e5163ec28914fc8422063b4c",
+  "http_batch_registry_parity": true,
+  "invalid_request_statuses": {
+    "missing_feature": 422,
+    "negative_amount": 422,
+    "negative_time": 422,
+    "text": 422,
+    "boolean": 422,
+    "infinity": 422,
+    "nan": 422,
+    "unknown_feature": 422,
+    "empty_batch": 422
+  },
+  "openapi_schema_verified": true,
+  "historical_freeze_preserved": true,
+  "status": "development_candidate",
+  "independent_low_margin_test": false
+}

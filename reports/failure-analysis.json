@@ -1,0 +1,107 @@
+{
+  "scope": "selection only; no calibration or evaluation labels used",
+  "code_sha256": "12e7bff2f4d50d52c29053304e9e282f872bd3b41d675b693bff7848ed057c8a",
+  "baseline_report_sha256": "3c9b64a4f41fd923c849bd9465432eafd819d3038bd04796e59fce1fcca35c38",
+  "experiment_report_sha256": "80a0eddc58ce55f919b25ef89f6fc78ef2163573d4e337b51769f74476a56739",
+  "assignment_sha256": "258a6e6fbcf0e61c635ab28600f6121b4fddf52366bd9c0e0e1225b0df6bc5e9",
+  "model_artifact_sha256": {
+    "random_forest": "1524c639cbbd9b8d0fe4cf01578c7e06240e3bff29283369d06ca971e657743e",
+    "lightgbm": "641853d23af66f6f7eab7f8a5fcaf98561ec96924f22941eaee055c2d639b831"
+  },
+  "models": [
+    {
+      "model": "approve_all",
+      "rows": 42632,
+      "frauds": 76,
+      "approved_frauds": 76,
+      "approved_fraud_amount": 12484.34,
+      "canceled_legitimate": 0,
+      "forgone_legitimate_margin": 0.0,
+      "canceled_frauds": 0,
+      "canceled_fraud_amount": 0.0,
+      "total_opportunity_loss": 12484.34,
+      "top_5_error_loss_share_pct": 40.30601537606314
+    },
+    {
+      "model": "amount_rule",
+      "rows": 42632,
+      "frauds": 76,
+      "approved_frauds": 74,
+      "approved_fraud_amount": 9740.53,
+      "canceled_legitimate": 405,
+      "forgone_legitimate_margin": 192101.8625,
+      "canceled_frauds": 2,
+      "canceled_fraud_amount": 2743.81,
+      "total_opportunity_loss": 201842.39250000002,
+      "top_5_error_loss_share_pct": 8.599790304209755
+    },
+    {
+      "model": "logistic_regression",
+      "rows": 42632,
+      "frauds": 76,
+      "approved_frauds": 26,
+      "approved_fraud_amount": 2745.3500000000004,
+      "canceled_legitimate": 13,
+      "forgone_legitimate_margin": 6716.4,
+      "canceled_frauds": 50,
+      "canceled_fraud_amount": 9738.989999999998,
+      "total_opportunity_loss": 9461.75,
+      "top_5_error_loss_share_pct": 85.41453747985311
+    },
+    {
+      "model": "random_forest",
+      "rows": 42632,
+      "frauds": 76,
+      "approved_frauds": 16,
+      "approved_fraud_amount": 1561.73,
+      "canceled_legitimate": 8,
+      "forgone_legitimate_margin": 6638.9725,
+      "canceled_frauds": 60,
+      "canceled_fraud_amount": 10922.609999999999,
+      "total_opportunity_loss": 8200.7025,
+      "top_5_error_loss_share_pct": 96.17724822964864
+    },
+    {
+      "model": "lightgbm",
+      "rows": 42632,
+      "frauds": 76,
+      "approved_frauds": 16,
+      "approved_fraud_amount": 2242.21,
+      "canceled_legitimate": 6,
+      "forgone_legitimate_margin": 6473.5325,
+      "canceled_frauds": 60,
+      "canceled_fraud_amount": 10242.130000000001,
+      "total_opportunity_loss": 8715.7425,
+      "top_5_error_loss_share_pct": 96.86025028848661
+    }
+  ],
+  "case_category_counts": {
+    "fraud_missed_by_both_trees": 15,
+    "fraud_caught_by_both_trees": 59,
+    "fraud_tree_decisions_disagree": 2,
+    "legitimate_canceled_by_either_tree": 9
+  },
+  "expensive_errors": {
+    "path": "data/processed/selection-expensive-errors.csv",
+    "sha256": "ad9e5a7ed1b470cd176c9a9f3eea57515a772c7cb20c69ff2fd9658be83fb645"
+  },
+  "case_studies": {
+    "path": "data/processed/selection-case-studies.csv",
+    "sha256": "195a384c1fed65d5ba677fb05afd349c740db5ef53c1b3cb71212b3edc750a6f"
+  },
+  "feature_importance": {
+    "path": "reports/feature-importance-selection.csv",
+    "sha256": "f1d35ac19b67e3e99353d4bcbb8b6f89e180f1eb1ac97a76e774c79876d8ee83"
+  },
+  "lightgbm_local_contributions": {
+    "path": "reports/selection-lightgbm-local-contributions.csv",
+    "sha256": "f6f8dfcf0dd08f3b7e0f37046f3579024eb751e8ff621124c2116d0bbe5ef192",
+    "units": "raw log-odds; five largest absolute contributions per case plus base value"
+  },
+  "limitations": [
+    "Native feature importance describes fitted-tree usage and is not causal.",
+    "LightGBM local contributions decompose model raw scores; they do not establish why a payment happened or why it was fraudulent.",
+    "Top errors and importance are descriptive selection-set findings; probabilities are uncalibrated.",
+    "PCA component meanings are unavailable; no merchant or customer narrative is inferred."
+  ]
+}

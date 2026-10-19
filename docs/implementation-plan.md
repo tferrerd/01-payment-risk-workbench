@@ -1,6 +1,6 @@
 # Payment Risk Workbench — implementation framework
 
-Recorded 2026-10-17. Status: plan agreed in direction; analysis and implementation pending.
+Recorded 2026-10-17; analysis status updated 2026-10-18. Stages 01–08 are executed, including a frozen historical-scenario evaluation and a separate low-margin economic hypothesis. Reusable LightGBM candidate inference, batch prediction, local API, and development registry entry are implemented. Public delivery and stronger probability-calibration evidence remain pending.
 
 ## Implementation approach
 
@@ -9,20 +9,18 @@ Progress from business economics through analysis, fitted inference, and operati
 ## Project charter
 
 - **User:** A payment risk analyst managing a limited transaction review queue.
-- **Decision:** Approve, challenge, or review each transaction using its calibrated fraud probability, amount, and an explicit policy.
-- **Prediction time:** Immediately before authorization. Assume published V1–V28 and Amount are available then; their upstream construction cannot be verified from this dataset. Time is elapsed time, not a calendar timestamp or a known local hour.
+- **Decision:** Initially approve or cancel each transaction using its fraud probability and amount. Challenge/review extensions require separately specified economics.
+- **Prediction time:** Immediately before authorization. Assume published Time, V1–V28 and Amount are available then; their upstream construction cannot be verified from this dataset. Time is elapsed time, not a calendar timestamp or a known local hour.
 - **Baseline:** Approve all; also compare a simple amount rule, logistic regression, and a boosted tree on identical evaluation rows.
-- **Primary KPI:** Simulated total policy cost per 1,000 transactions, with the absolute cost, transaction count, time window, and difference versus approve-all reported alongside it.
-- **Guardrails:** Legitimate approval rate, false-positive rate, fraud recall, review utilization, and challenge rate. Proposed primary review cap: 1% of transactions in each one-hour replay window; sensitivity at 0.5%, 2%, and 5%. These are scenario settings, not observed operational capacity.
-- **Success:** A reproducible learned policy improves primary-scenario cost over approve-all and the amount rule on untouched temporal evaluation data while respecting the review cap. Report paired uncertainty; if the interval includes no improvement, label the result inconclusive. Select the deployable candidate using development data only.
+- **Primary KPI:** Simulated profit per 1,000 transactions, with total profit, percentage of the perfect-label maximum, transaction count, split, and comparison with approve-all.
+- **Guardrails:** Legitimate approval rate, legitimate cancellation rate, fraud canceled recall, and total cancellation rate. The current binary policy has no review queue or capacity constraint; those are deferred extensions.
+- **Success:** A reproducible learned policy improves primary-scenario profit over approve-all and the amount rule on the reserved random evaluation set. Disclose prior EDA exposure. Report paired uncertainty; if the interval includes no improvement, label the result inconclusive. Select the deployable candidate using development data only.
 
 ## Economics and policy
 
-Define costs before model selection. Count approved fraud as a configurable fraction of Amount, legitimate friction as a configurable cost, and review as a per-transaction cost. Specify challenge abandonment, fraud prevention, review accuracy, and review delay explicitly. None of these outcomes or costs is observed in the source data.
+The [historical profit scenario](cost-scenario.md) and [versioned configuration](../config/cost-scenario.json) use 25% legitimate profit, 100% fraud loss, and zero cancellation payoff for stages 02–07. The development inference candidate uses stage 08’s [0.3% margin scenario](../config/cost-scenario-low-margin.json). Initial baseline fee/effectiveness assumptions have been superseded.
 
-Choose and freeze a primary scenario in the first analysis stage, with alternative scenarios for sensitivity. Show any profit-margin scenario separately. A threshold of 0.20 or a 25% margin is not established for this dataset.
-
-Rank review candidates by expected cost reduction from review, subject to capacity. Replay arrivals in order: a live decision cannot use transactions that have not arrived. Label any full-window ranking as a retrospective batch scenario. Keep calibration and policy parameters with the fitted model so the application serves the evaluated behavior.
+For meaningful fraud probabilities, cancellation is preferred above margin/(margin + fraud loss): 0.20 historically, approximately 0.002991 for the development candidate. Exact ties favor approval. Compare economic value and ranking metrics separately. Calibrate and version probabilities and policy together before final release. Review/challenge policies need their own assumptions if introduced later.
 
 ## Analysis sequence
 
@@ -35,26 +33,27 @@ Each stage produces an executed notebook and a short report under `docs/reports/
 | 03 — Features | Test only transformations supported by these numeric features; fit all learned transformations on training data. |
 | 04 — Experiments | Compare a boosted tree with logistic regression; track data, code, splits, parameters and artifacts in MLflow. Tune only when baseline evidence justifies it. |
 | 05 — Explanations and failures | Explain representative expensive mistakes and useful predictions; PCA components cannot support invented customer or merchant narratives. |
-| 06 — Temporal calibration and policy | Fit calibration on later development observations; assess cost and capacity policies using earlier data only. |
+| 06 — Calibration and policy | Compare mappings by grouped calibration-fold Brier, fit the selected mapping on calibration, and assess the fixed approve/cancel policy on selection. |
 | 07 — Uncertainty and recommendation | Run the frozen final evaluation, paired cost comparisons, and sensitivity analysis; recommend deployment or document why evidence is insufficient. |
+| 08 — Low-margin payments | Reprice existing scores at a user-proposed 0.3% retained margin / 100% fraud loss; compare algebraic policies and label consumed evaluation reuse as regression. |
 
 ## Evaluation protocol
 
-Frozen as `temporal-v1` on 2026-10-18: training `[0, 86400)`, model selection `[86400, 115200)`, calibration/policy development `[115200, 144000)`, and evaluation `[144000, end]`. All windows contain both classes. See the [evaluation protocol](evaluation-protocol.md), [configuration](../config/evaluation.json), and [duplicate/split audit](../reports/duplicate-split-audit.json). Tied timestamps stay together; split assignments include source row IDs. Economics and policy assumptions still need to be specified before policy selection.
+The active protocol is `grouped-random-v1`: seeded, label-stratified random allocation of exact V1–V28/Amount groups, targeting 60% training, 15% selection, 10% calibration, and 15% evaluation. Time remains an input. Retain every payment and keep repeated patterns within one split. See the [protocol](evaluation-protocol.md), [configuration](../config/evaluation.json), and [audit](../reports/duplicate-split-audit.json).
 
-Audit exact duplicates and identical-feature conflicting labels across boundaries. Report overlap and a sensitivity evaluation excluding repeated evaluation feature vectors; do not silently discard records or invent customer groups. There are no customer identifiers for grouped validation. Upstream PCA fitting provenance limits any claim of fully leakage-free preprocessing.
-
-Use average precision as the stated PR ranking metric, recall at a development-selected threshold targeting 0.1% false positives, realized false-positive rate, Brier score, reliability plots, and simulated policy cost. Report denominators and fraud counts for every window. Full-dataset label-aware EDA has already exposed the evaluation population; disclose that it is not an untouched analytical holdout. Reserve it from subsequent fitting/tuning, score the frozen candidate once, and treat reuse after changes as a regression benchmark. Fresh confirmation requires newly acquired later data.
-
-Use paired time-block resampling for cost differences, disclose block length and the short-window limitation, and check sensitivity to block size. Two days cannot establish long-term drift robustness, seasonality, or production impact.
+Fit preprocessing on training only, compare candidates on selection, choose any calibration mapping using calibration-only folds, and assess the resulting policy on the reused selection set. Quantify paired development uncertainty, freeze one candidate, then score evaluation once. Report average precision, recall, false-positive rate, Brier score, reliability, and simulated profit with transaction and fraud counts. For paired uncertainty, resample pattern groups together. Full-dataset EDA and earlier experiments preceded this protocol; evaluation is not analytically untouched. The random split estimates held-out performance within this two-day population; future-period and production claims require additional data.
 
 ## Delivery after analytical evidence
 
 1. Package preprocessing, classifier, calibrator, and policy; provide train, evaluate, and batch-predict commands.
 2. Add validated API inference and the transaction explorer, risk explanations, policy controls, review queue, and cost tradeoff chart.
-3. Register candidates in MLflow. Bind evaluation to code, data, schema, feature, split, and policy versions. Evaluate candidate and incumbent on the same window before promotion.
+3. Register candidates in MLflow. Bind evaluation to code, data, schema, feature, split, and policy versions. Evaluate candidate and incumbent on the same evaluation payments before promotion.
 4. Build a container with a pinned artifact; add CI, health and inference checks, and a traceable release. Choose hosting when deployment requirements are known.
 5. Implement score/input monitoring and delayed-label quality reports, a retraining replay, and an executed rollback with a post-rollback prediction. Clearly label replayed monitoring and simulated labels/outcomes.
 6. Publish the stakeholder memo, ownership and operating record, public demo, case study, and original editable presentation with reviewed PDF.
 
-The first implementation milestone is stage 01. The dataset acquisition profile alone does not complete the audit. No model, operational service, or business improvement is claimed yet.
+Stages 01–07 provide exploration, a split audit, fitted baselines, feature and model comparisons, error analysis, calibration checks, paired uncertainty, and a frozen final evaluation. The selected raw Random Forest supports modeled improvement over approve-all under the primary scenario; superiority over logistic regression is inconclusive. Next is a versioned offline/demo prototype and artifact registration. Production promotion and claims of reliable probabilities require further evidence.
+
+The additional stage 08 preserves stages 02–07 and their freeze. The proposed low-margin economics change the development model ranking; they require their own calibration and fresh confirmation before a new final policy claim.
+
+Inference delivery after the notebooks is recorded in [report 09](reports/09-inference-candidate.md). The local API and CSV path share validated inference code; the packaged artifact reproduces saved selection scores and is registered with a development-only `candidate` alias. The [container and CI workflow](container.md) packages that exact snapshot with release checksums, health checks, and saved-prediction smoke tests. The [transaction explorer](explorer.md) adds live explanations, search/filter/export, and explicit browser-only economic simulations. A [Render free-tier blueprint](cloud-deployment.md) prepares cloud hosting. Actual public deployment verification, image publishing, monitoring/retraining/rollback evidence, and stronger validation before production promotion remain pending.

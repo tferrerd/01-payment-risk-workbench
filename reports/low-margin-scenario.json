@@ -1,0 +1,465 @@
+{
+  "metadata": {
+    "scenario": "low-margin-payments-v1",
+    "legitimate_margin_fraction": 0.003,
+    "fraud_loss_fraction": 1.0,
+    "break_even_threshold": 0.0029910269192422734,
+    "original_threshold": 0.2,
+    "lineage": {
+      "config/candidate-freeze.json": "0ce1d1605c92f68e49be8f779d2e2a5c4c5d12bfe431e816f9680df948b35493",
+      "config/cost-scenario.json": "7dda465ab47ce22a71fbbf503278ea08b6b463a25a17be42e590c5acd2d54f26",
+      "reports/final-evaluation.json": "081096492274a28ed3bfcfb5bdd5851f5c9764e3c47ccbfa3d3a4ecbb8d8f48b",
+      "reports/baseline-results.json": "3c9b64a4f41fd923c849bd9465432eafd819d3038bd04796e59fce1fcca35c38",
+      "reports/experiment-results.json": "80a0eddc58ce55f919b25ef89f6fc78ef2163573d4e337b51769f74476a56739",
+      "reports/calibration-results.json": "f16a139e715d15080f6d8e041733b2f74c625bdb172483480122b50b70a1e016",
+      "data/processed/split-assignments.csv": "258a6e6fbcf0e61c635ab28600f6121b4fddf52366bd9c0e0e1225b0df6bc5e9",
+      "data/processed/final-evaluation-predictions.csv": "7ace7808cbe56751bd4494e4f52a7b01725b1d98f3ddb02e8953f9eaa6906e38",
+      "data/processed/baseline-selection-predictions.csv": "0b23cb2621b55994f44be5f2627070756ecc2506e943c1b2c7768c2c7b1e807f",
+      "data/processed/experiment-selection-predictions.csv": "c0ab433a8273bf6b6892a09a913e83284474f644172323428120c00181ab8c8f",
+      "data/processed/calibrated-selection-predictions.csv": "a6b3ca986075cbcc3609923c2942fc0058fc361190e1f382b41f31b49d620ed5",
+      "config/cost-scenario-low-margin.json": "e53f5336e746a4e97f9eda8a062e341792f4374d5d43fb52a7a83edda0722315",
+      "scripts/run_low_margin_scenario.py": "dd12e33a228166ea1347d023bba64bcf48ffd6a4ff992945dfdf737623093bff"
+    },
+    "models_refitted": false,
+    "independent_final_evaluation": false,
+    "existing_candidate": "random_forest_raw",
+    "scope": "New economic hypothesis on existing predictions; selection is development and consumed evaluation is regression only.",
+    "notes": [
+      "No extra chargeback fees, recoveries, processing costs or customer lifetime effects are included.",
+      "Existing scores were not trained or selected for this scenario and probability calibration near the new threshold is uncertain.",
+      "The previously consumed evaluation set can only provide a reused regression comparison for this new scenario."
+    ]
+  },
+  "comparisons": {
+    "selection_development": {
+      "results": [
+        {
+          "policy": "approve_all",
+          "rows": 42632,
+          "frauds": 76,
+          "frauds_canceled": 0,
+          "fraud_canceled_recall": 0.0,
+          "legitimate_canceled": 0,
+          "legitimate_cancellation_rate": 0.0,
+          "approved_fraud_amount": 12484.34,
+          "forgone_legitimate_margin": 0.0,
+          "simulated_total_profit": -1212.198499999999,
+          "simulated_profit_per_1000": -28.434004972790373,
+          "maximum_possible_profit": 11272.141500000002,
+          "profit_pct_of_maximum": -10.753932604554324
+        },
+        {
+          "policy": "cancel_all_positive_amounts",
+          "rows": 42632,
+          "frauds": 76,
+          "frauds_canceled": 72,
+          "fraud_canceled_recall": 0.9473684210526315,
+          "legitimate_canceled": 42297,
+          "legitimate_cancellation_rate": 0.9939139016824889,
+          "approved_fraud_amount": 0.0,
+          "forgone_legitimate_margin": 11272.141500000002,
+          "simulated_total_profit": 0.0,
+          "simulated_profit_per_1000": 0.0,
+          "maximum_possible_profit": 11272.141500000002,
+          "profit_pct_of_maximum": 0.0
+        },
+        {
+          "policy": "amount_rule",
+          "rows": 42632,
+          "frauds": 76,
+          "frauds_canceled": 2,
+          "fraud_canceled_recall": 0.02631578947368421,
+          "legitimate_canceled": 405,
+          "legitimate_cancellation_rate": 0.009516871886455494,
+          "approved_fraud_amount": 9740.53,
+          "forgone_legitimate_margin": 2305.22235,
+          "simulated_total_profit": -773.6108500000003,
+          "simulated_profit_per_1000": -18.14624812347533,
+          "maximum_possible_profit": 11272.141500000002,
+          "profit_pct_of_maximum": -6.86303352384283
+        },
+        {
+          "policy": "random_forest_original_20pct",
+          "rows": 42632,
+          "frauds": 76,
+          "frauds_canceled": 60,
+          "fraud_canceled_recall": 0.7894736842105263,
+          "legitimate_canceled": 8,
+          "legitimate_cancellation_rate": 0.00018798759281887396,
+          "approved_fraud_amount": 1561.73,
+          "forgone_legitimate_margin": 79.66767000000002,
+          "simulated_total_profit": 9630.74383,
+          "simulated_profit_per_1000": 225.90410560142615,
+          "maximum_possible_profit": 11272.141500000002,
+          "profit_pct_of_maximum": 85.43845754597739
+        },
+        {
+          "policy": "random_forest_break_even",
+          "rows": 42632,
+          "frauds": 76,
+          "frauds_canceled": 65,
+          "fraud_canceled_recall": 0.8552631578947368,
+          "legitimate_canceled": 1377,
+          "legitimate_cancellation_rate": 0.03235736441394868,
+          "approved_fraud_amount": 941.44,
+          "forgone_legitimate_margin": 1449.16752,
+          "simulated_total_profit": 8881.53398,
+          "simulated_profit_per_1000": 208.33022096078062,
+          "maximum_possible_profit": 11272.141500000002,
+          "profit_pct_of_maximum": 78.7918957546798
+        },
+        {
+          "policy": "logistic_break_even",
+          "rows": 42632,
+          "frauds": 76,
+          "frauds_canceled": 64,
+          "fraud_canceled_recall": 0.8421052631578947,
+          "legitimate_canceled": 582,
+          "legitimate_cancellation_rate": 0.01367609737757308,
+          "approved_fraud_amount": 1056.51,
+          "forgone_legitimate_margin": 511.0341,
+          "simulated_total_profit": 9704.5974,
+          "simulated_profit_per_1000": 227.63645618314882,
+          "maximum_possible_profit": 11272.141500000002,
+          "profit_pct_of_maximum": 86.09364422900475
+        },
+        {
+          "policy": "lightgbm_break_even",
+          "rows": 42632,
+          "frauds": 76,
+          "frauds_canceled": 62,
+          "fraud_canceled_recall": 0.8157894736842105,
+          "legitimate_canceled": 90,
+          "legitimate_cancellation_rate": 0.002114860419212332,
+          "approved_fraud_amount": 950.3499999999999,
+          "forgone_legitimate_margin": 146.89368,
+          "simulated_total_profit": 10174.89782,
+          "simulated_profit_per_1000": 238.668085475699,
+          "maximum_possible_profit": 11272.141500000002,
+          "profit_pct_of_maximum": 90.26588088873794
+        },
+        {
+          "policy": "random_forest_isotonic_break_even",
+          "rows": 42632,
+          "frauds": 76,
+          "frauds_canceled": 60,
+          "fraud_canceled_recall": 0.7894736842105263,
+          "legitimate_canceled": 34,
+          "legitimate_cancellation_rate": 0.0007989472694802143,
+          "approved_fraud_amount": 1561.73,
+          "forgone_legitimate_margin": 190.93869,
+          "simulated_total_profit": 9519.47281,
+          "simulated_profit_per_1000": 223.29407041658848,
+          "maximum_possible_profit": 11272.141500000002,
+          "profit_pct_of_maximum": 84.45132462185644
+        }
+      ],
+      "uncertainty": {
+        "rows": 42632,
+        "groups": 41349,
+        "repeats": 2000,
+        "seed": 42,
+        "method": "Unstratified paired pattern-group bootstrap, percentile 95% intervals; ratio uses sampled payment count",
+        "policy_intervals": [
+          {
+            "policy": "approve_all",
+            "profit_per_1000": -28.434004972790373,
+            "lower_95": -173.75015895654988,
+            "upper_95": 96.37797174068517
+          },
+          {
+            "policy": "cancel_all_positive_amounts",
+            "profit_per_1000": 0.0,
+            "lower_95": 0.0,
+            "upper_95": 0.0
+          },
+          {
+            "policy": "amount_rule",
+            "profit_per_1000": -18.14624812347533,
+            "lower_95": -132.06470598788363,
+            "upper_95": 79.96958738091877
+          },
+          {
+            "policy": "random_forest_original_20pct",
+            "profit_per_1000": 225.90410560142615,
+            "lower_95": 181.9306130150298,
+            "upper_95": 257.4115911285829
+          },
+          {
+            "policy": "random_forest_break_even",
+            "profit_per_1000": 208.33022096078062,
+            "lower_95": 179.23794818119774,
+            "upper_95": 228.9649107275349
+          },
+          {
+            "policy": "logistic_break_even",
+            "profit_per_1000": 227.63645618314882,
+            "lower_95": 192.1015214723742,
+            "upper_95": 251.4864506704061
+          },
+          {
+            "policy": "lightgbm_break_even",
+            "profit_per_1000": 238.668085475699,
+            "lower_95": 209.30920195471376,
+            "upper_95": 259.63656478445466
+          },
+          {
+            "policy": "random_forest_isotonic_break_even",
+            "profit_per_1000": 223.29407041658848,
+            "lower_95": 179.0013137098242,
+            "upper_95": 254.73566129012036
+          }
+        ],
+        "paired_differences": [
+          {
+            "candidate": "random_forest_break_even",
+            "comparator": "approve_all",
+            "profit_difference_per_1000": 236.764225933571,
+            "lower_95": 114.55305043180356,
+            "upper_95": 384.55259521594587,
+            "conclusion": "positive"
+          },
+          {
+            "candidate": "random_forest_break_even",
+            "comparator": "cancel_all_positive_amounts",
+            "profit_difference_per_1000": 208.33022096078062,
+            "lower_95": 179.23794818119774,
+            "upper_95": 228.9649107275349,
+            "conclusion": "positive"
+          },
+          {
+            "candidate": "random_forest_break_even",
+            "comparator": "amount_rule",
+            "profit_difference_per_1000": 226.47646908425594,
+            "lower_95": 133.17207635041393,
+            "upper_95": 333.2146273363526,
+            "conclusion": "positive"
+          },
+          {
+            "candidate": "random_forest_break_even",
+            "comparator": "random_forest_original_20pct",
+            "profit_difference_per_1000": -17.57388464064553,
+            "lower_95": -35.300754631397275,
+            "upper_95": 11.990333551985486,
+            "conclusion": "inconclusive"
+          },
+          {
+            "candidate": "random_forest_break_even",
+            "comparator": "logistic_break_even",
+            "profit_difference_per_1000": -19.3062352223682,
+            "lower_95": -51.578423213116686,
+            "upper_95": 17.36100218913394,
+            "conclusion": "inconclusive"
+          },
+          {
+            "candidate": "random_forest_break_even",
+            "comparator": "lightgbm_break_even",
+            "profit_difference_per_1000": -30.33786451491838,
+            "lower_95": -35.425300477433936,
+            "upper_95": -25.666967776622116,
+            "conclusion": "negative"
+          },
+          {
+            "candidate": "random_forest_break_even",
+            "comparator": "random_forest_isotonic_break_even",
+            "profit_difference_per_1000": -14.96384945580786,
+            "lower_95": -31.59389486799662,
+            "upper_95": 14.390187384356269,
+            "conclusion": "inconclusive"
+          }
+        ]
+      },
+      "predictions": {
+        "path": "data/processed/low-margin-selection_development-predictions.csv",
+        "sha256": "98efd61572c92956ea2f1be39058c0fe6776ddaf3a072c5ac63e5ae7b6f957ef"
+      },
+      "mlflow_run_id": "60eb9318ee22452c9ad83c7d4b8762c1"
+    },
+    "evaluation_regression": {
+      "results": [
+        {
+          "policy": "approve_all",
+          "rows": 42694,
+          "frauds": 71,
+          "frauds_canceled": 0,
+          "fraud_canceled_recall": 0.0,
+          "legitimate_canceled": 0,
+          "legitimate_cancellation_rate": 0.0,
+          "approved_fraud_amount": 9207.3,
+          "forgone_legitimate_margin": 0.0,
+          "simulated_total_profit": 2410.7909400000003,
+          "simulated_profit_per_1000": 56.4667386518012,
+          "maximum_possible_profit": 11618.09094,
+          "profit_pct_of_maximum": 20.750319070923027
+        },
+        {
+          "policy": "cancel_all_positive_amounts",
+          "rows": 42694,
+          "frauds": 71,
+          "frauds_canceled": 68,
+          "fraud_canceled_recall": 0.9577464788732394,
+          "legitimate_canceled": 42357,
+          "legitimate_cancellation_rate": 0.99375923797011,
+          "approved_fraud_amount": 0.0,
+          "forgone_legitimate_margin": 11618.090940000002,
+          "simulated_total_profit": 0.0,
+          "simulated_profit_per_1000": 0.0,
+          "maximum_possible_profit": 11618.09094,
+          "profit_pct_of_maximum": 0.0
+        },
+        {
+          "policy": "amount_rule",
+          "rows": 42694,
+          "frauds": 71,
+          "frauds_canceled": 2,
+          "fraud_canceled_recall": 0.028169014084507043,
+          "legitimate_canceled": 477,
+          "legitimate_cancellation_rate": 0.011191140933298923,
+          "approved_fraud_amount": 5862.539999999999,
+          "forgone_legitimate_margin": 2622.87288,
+          "simulated_total_profit": 3132.67806,
+          "simulated_profit_per_1000": 73.37513608469574,
+          "maximum_possible_profit": 11618.09094,
+          "profit_pct_of_maximum": 26.96379358862206
+        },
+        {
+          "policy": "random_forest_original_20pct",
+          "rows": 42694,
+          "frauds": 71,
+          "frauds_canceled": 54,
+          "fraud_canceled_recall": 0.7605633802816901,
+          "legitimate_canceled": 10,
+          "legitimate_cancellation_rate": 0.0002346151139056378,
+          "approved_fraud_amount": 4066.5199999999995,
+          "forgone_legitimate_margin": 4.053179999999999,
+          "simulated_total_profit": 7547.51776,
+          "simulated_profit_per_1000": 176.7816967255352,
+          "maximum_possible_profit": 11618.09094,
+          "profit_pct_of_maximum": 64.96349356342704
+        },
+        {
+          "policy": "random_forest_break_even",
+          "rows": 42694,
+          "frauds": 71,
+          "frauds_canceled": 61,
+          "fraud_canceled_recall": 0.8591549295774648,
+          "legitimate_canceled": 1481,
+          "legitimate_cancellation_rate": 0.03474649836942496,
+          "approved_fraud_amount": 687.36,
+          "forgone_legitimate_margin": 1468.51959,
+          "simulated_total_profit": 9462.211350000001,
+          "simulated_profit_per_1000": 221.62859769522652,
+          "maximum_possible_profit": 11618.09094,
+          "profit_pct_of_maximum": 81.44377074397389
+        },
+        {
+          "policy": "logistic_break_even",
+          "rows": 42694,
+          "frauds": 71,
+          "frauds_canceled": 57,
+          "fraud_canceled_recall": 0.8028169014084507,
+          "legitimate_canceled": 558,
+          "legitimate_cancellation_rate": 0.01309152335593459,
+          "approved_fraud_amount": 4054.6200000000003,
+          "forgone_legitimate_margin": 558.94506,
+          "simulated_total_profit": 7004.525880000001,
+          "simulated_profit_per_1000": 164.0634721506535,
+          "maximum_possible_profit": 11618.09094,
+          "profit_pct_of_maximum": 60.28981797589545
+        }
+      ],
+      "uncertainty": {
+        "rows": 42694,
+        "groups": 41351,
+        "repeats": 2000,
+        "seed": 42,
+        "method": "Unstratified paired pattern-group bootstrap, percentile 95% intervals; ratio uses sampled payment count",
+        "policy_intervals": [
+          {
+            "policy": "approve_all",
+            "profit_per_1000": 56.4667386518012,
+            "lower_95": -91.28407220587935,
+            "upper_95": 177.12200254548338
+          },
+          {
+            "policy": "cancel_all_positive_amounts",
+            "profit_per_1000": 0.0,
+            "lower_95": 0.0,
+            "upper_95": 0.0
+          },
+          {
+            "policy": "amount_rule",
+            "profit_per_1000": 73.37513608469574,
+            "lower_95": -4.800621378833912,
+            "upper_95": 141.03517249299867
+          },
+          {
+            "policy": "random_forest_original_20pct",
+            "profit_per_1000": 176.7816967255352,
+            "lower_95": 57.73325149883021,
+            "upper_95": 261.9558791782546
+          },
+          {
+            "policy": "random_forest_break_even",
+            "profit_per_1000": 221.62859769522652,
+            "lower_95": 193.11710933750825,
+            "upper_95": 240.13369169870862
+          },
+          {
+            "policy": "logistic_break_even",
+            "profit_per_1000": 164.0634721506535,
+            "lower_95": 45.08440444684115,
+            "upper_95": 248.2631332925244
+          }
+        ],
+        "paired_differences": [
+          {
+            "candidate": "random_forest_break_even",
+            "comparator": "approve_all",
+            "profit_difference_per_1000": 165.16185904342532,
+            "lower_95": 48.9277119291273,
+            "upper_95": 313.12288529310354,
+            "conclusion": "positive"
+          },
+          {
+            "candidate": "random_forest_break_even",
+            "comparator": "cancel_all_positive_amounts",
+            "profit_difference_per_1000": 221.62859769522652,
+            "lower_95": 193.11710933750825,
+            "upper_95": 240.13369169870862,
+            "conclusion": "positive"
+          },
+          {
+            "candidate": "random_forest_break_even",
+            "comparator": "amount_rule",
+            "profit_difference_per_1000": 148.2534616105308,
+            "lower_95": 84.58957585818838,
+            "upper_95": 224.0033426022831,
+            "conclusion": "positive"
+          },
+          {
+            "candidate": "random_forest_break_even",
+            "comparator": "random_forest_original_20pct",
+            "profit_difference_per_1000": 44.84690096969132,
+            "lower_95": -34.69642274922252,
+            "upper_95": 165.07518410390003,
+            "conclusion": "inconclusive"
+          },
+          {
+            "candidate": "random_forest_break_even",
+            "comparator": "logistic_break_even",
+            "profit_difference_per_1000": 57.56512554457302,
+            "lower_95": -21.776861463353555,
+            "upper_95": 177.05490168768247,
+            "conclusion": "inconclusive"
+          }
+        ]
+      },
+      "predictions": {
+        "path": "data/processed/low-margin-evaluation_regression-predictions.csv",
+        "sha256": "459b8555e59d3a8e6da5e7d5d80818549ab7f3fc1cb3990cef6140734691ee27"
+      },
+      "mlflow_run_id": "daa5f37ad3434b28989bca54a1a2db11"
+    }
+  }
+}

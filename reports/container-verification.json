@@ -1,0 +1,74 @@
+{
+  "checked_at_utc": "2026-10-19T01:16:08.997028+00:00",
+  "release_id": "lightgbm-low-margin-dev-v1-inference-v1",
+  "model_id": "lightgbm-low-margin-dev-v1",
+  "artifact_sha256": "05dc10d01d58c57c8b8c6b0ed0d8b042ed143da8e5163ec28914fc8422063b4c",
+  "release_files_verified": true,
+  "example_rows": 3,
+  "saved_prediction_parity": true,
+  "invalid_requests_rejected": 9,
+  "openapi_schema_verified": true,
+  "image_id": "sha256:c50e3d85bf47f937c229afeb7f98aa6757e4e465013e5fc4ef12d424bb24025b",
+  "image_tag": "payment-risk:lightgbm-low-margin-dev-v1",
+  "platform": "linux/arm64",
+  "image_size_bytes": 156609723,
+  "image_labels": {
+    "io.payment-risk.model-sha256": "05dc10d01d58c57c8b8c6b0ed0d8b042ed143da8e5163ec28914fc8422063b4c",
+    "io.payment-risk.release": "lightgbm-low-margin-dev-v1-inference-v1",
+    "org.opencontainers.image.revision": "local-uncommitted",
+    "org.opencontainers.image.title": "Payment Risk Workbench"
+  },
+  "runtime_user": "10001:10001",
+  "container_name": "payment-risk-demo",
+  "container_health": "healthy",
+  "read_only_root_filesystem": true,
+  "host_binding": {
+    "8000/tcp": [
+      {
+        "HostIp": "127.0.0.1",
+        "HostPort": "8001"
+      }
+    ]
+  },
+  "host_health_verified": true,
+  "container_inference_tests_passed": 5,
+  "local_full_suite_tests_passed": 12,
+  "historical_freeze_preserved": true,
+  "historical_model_snapshots_preserved": true,
+  "github_actions_status": "Prepared locally; not committed, pushed, or run on GitHub in this step.",
+  "independent_model_quality_test": false,
+  "delivery_files": {
+    "Dockerfile": "83ce003e134190376ad65f56cdf7ffa283263185a1e7cbdfa0c7ae749ef2f4eb",
+    ".dockerignore": "c9172f4248a8953bff7ffdc12f071fe3e00d4d45864956d1db33ea27137af64c",
+    ".github/workflows/inference-ci.yml": "0c796212576c979cfb6a3f6620af33b283ed3e3ca1012b79e98f15c3b62db2cc",
+    "scripts/check_release.py": "2a2dc1f41e2e651dc274fa2efa2bd9f55f9476d2a3193df21d1061b444f28002",
+    "deployment/release.json": "f18c7b48facf34a35721b7f0b4fb17b2fb60d40d97593240f7c3425f9f4580d1"
+  },
+  "installed_runtime_packages": [
+    "annotated-doc==0.0.5",
+    "annotated-types==0.8.0",
+    "anyio==4.15.1",
+    "click==8.5.0",
+    "cloudpickle==3.1.2",
+    "fastapi==0.146.0",
+    "h11==0.16.0",
+    "idna==3.20",
+    "joblib==1.6.0",
+    "lightgbm==4.7.0",
+    "narwhals==2.27.1",
+    "numpy==2.5.4",
+    "opentelemetry-api==1.45.1",
+    "pandas==3.0.6",
+    "pydantic==2.14.1",
+    "pydantic_core==2.50.1",
+    "python-dateutil==2.9.0.post0",
+    "scikit-learn==1.9.1",
+    "scipy==1.18.1",
+    "six==1.17.0",
+    "starlette==1.9.0",
+    "threadpoolctl==3.7.0",
+    "typing-inspection==0.4.4",
+    "typing_extensions==4.16.0",
+    "uvicorn==0.54.0"
+  ]
+}

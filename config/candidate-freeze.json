@@ -1,0 +1,70 @@
+{
+  "version": "candidate-v1",
+  "frozen_at_utc": "2026-10-19T00:18:15.306575+00:00",
+  "evaluation_scored_when_frozen": false,
+  "candidate": {
+    "name": "random_forest_raw",
+    "mapping": "identity",
+    "posthoc_calibrated": false,
+    "snapshot_path": "models/frozen/candidate-v1.joblib",
+    "snapshot_sha256": "981b133ac7e07bed59ab4a46add5ef35313fd5fef69c8b079d28d991f7499212"
+  },
+  "logistic_reference": {
+    "snapshot_path": "models/frozen/logistic-reference-v1.joblib",
+    "snapshot_sha256": "a983c7d0120e3a10f3a71d43b5dfca9da392b2b4d903dd4262b231aafef6ad04"
+  },
+  "lineage": {
+    "config/evaluation.json": "81b79e150773f2ce579a4a2c5ecef825d04d75bda1c83787fafb8433b37e8620",
+    "config/cost-scenario.json": "7dda465ab47ce22a71fbbf503278ea08b6b463a25a17be42e590c5acd2d54f26",
+    "reports/duplicate-split-audit.json": "8964785ec8c317b778e34f3222383b0eeab4db85b0d95e0c59d673ba7300c395",
+    "reports/baseline-results.json": "3c9b64a4f41fd923c849bd9465432eafd819d3038bd04796e59fce1fcca35c38",
+    "reports/experiment-results.json": "80a0eddc58ce55f919b25ef89f6fc78ef2163573d4e337b51769f74476a56739",
+    "reports/calibration-results.json": "f16a139e715d15080f6d8e041733b2f74c625bdb172483480122b50b70a1e016",
+    "data/processed/split-assignments.csv": "258a6e6fbcf0e61c635ab28600f6121b4fddf52366bd9c0e0e1225b0df6bc5e9",
+    "poetry.lock": "10ec1af97a7d7eec5c2bfc97daa31f6683cf3088513f92dbf2b034544ccb4d90",
+    "scripts/run_final_evaluation.py": "b71ce700fb51fb091cf55f7c3df61e7ea8dc3fb99a3ad3118c830e1c52e3045e",
+    "scripts/run_baselines.py": "7f4dd249fcc1269ab3c96f4c0a09c69c698e1261a1586f814b9e42998f3e2556"
+  },
+  "selection_uncertainty_sha256": "d155dde259354f8cbc752eea7b4321cf1a0503894221d25e7528639b9a676342",
+  "decision_rule": "Maximum observed primary-scenario selection profit among fitted learned alternatives; intervals describe uncertainty and do not prove superiority",
+  "primary_comparator": "approve_all",
+  "secondary_comparators": [
+    "amount_rule",
+    "logistic_regression"
+  ],
+  "threshold": 0.2,
+  "training_prior": 0.0017365476030380812,
+  "training_amount_p99": 1006.9080000000002,
+  "frozen_fpr_diagnostic": {
+    "threshold": 0.30541666666666667,
+    "predict_none": false,
+    "selection_target_fpr": 0.001,
+    "comparison": "score >= threshold"
+  },
+  "sensitivity_plan": {
+    "fractions": {
+      "fraud_loss_fraction": [
+        0.5,
+        1.0,
+        1.5
+      ],
+      "legitimate_margin_fraction": [
+        0.1,
+        0.25,
+        0.4
+      ]
+    },
+    "policies": [
+      "hold primary actions fixed",
+      "use margin/(margin+fraud_loss) threshold on frozen scores"
+    ],
+    "use": "Descriptive scenarios only; no candidate or threshold chosen using evaluation outcomes"
+  },
+  "bootstrap": {
+    "repeats": 2000,
+    "seed": 42,
+    "unit": "exact V1\u2013V28/Amount pattern group"
+  },
+  "evidence_rule": "Primary improvement is supported only if the paired 95% interval vs approve_all is wholly positive; otherwise inconclusive or negative. No production promotion is implied.",
+  "evaluation_exposure": "Full-dataset label-aware EDA and earlier chronological baseline experiments preceded this revised protocol. Evaluation is reserved from further fitting/tuning but is not a pristine analytical holdout."
+}

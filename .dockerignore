@@ -1,0 +1,23 @@
+# Only inference code, its pinned snapshot, and smoke-test inputs enter the build.
+**
+!Dockerfile
+!requirements-inference.txt
+!payment_risk/
+!payment_risk/*.py
+!models/
+!models/candidates/
+!models/candidates/lightgbm-low-margin-dev-v1.joblib
+!models/candidates/lightgbm-low-margin-dev-v1.json
+!deployment/
+!deployment/release.json
+!deployment/explorer-v1.json
+!examples/
+!examples/predict-request.json
+!examples/predict-expected.json
+!examples/explorer-sample.json
+!web/
+!web/index.html
+!web/style.css
+!web/app.mjs
+!scripts/
+!scripts/check_release.py

@@ -1,0 +1,52 @@
+name: Inference container
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  container:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      IMAGE: payment-risk-ci:${{ github.sha }}
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - name: Build pinned development candidate
+        run: docker build --build-arg REVISION="$GITHUB_SHA" --tag "$IMAGE" .
+      - name: Test inference contract
+        run: |
+          docker run --rm --read-only --tmpfs /tmp --cap-drop ALL --security-opt no-new-privileges \
+            --volume "$PWD/tests:/app/tests:ro" --volume "$PWD/config:/app/config:ro" \
+            "$IMAGE" python -m unittest discover -s tests -p test_inference.py -v
+          docker run --rm --read-only --tmpfs /tmp --cap-drop ALL --security-opt no-new-privileges \
+            --volume "$PWD/tests:/app/tests:ro" --volume "$PWD/reports/explorer-sample.json:/app/reports/explorer-sample.json:ro" \
+            "$IMAGE" python -m unittest discover -s tests -p test_explorer.py -v
+      - name: Test browser policy calculations
+        run: node --test tests/test_explorer.mjs
+      - name: Start API
+        run: |
+          docker run --detach --name payment-risk-ci --read-only --tmpfs /tmp \
+            --cap-drop ALL --security-opt no-new-privileges "$IMAGE"
+      - name: Verify real-model HTTP predictions and input validation
+        run: |
+          mkdir -p reports/ci
+          docker exec payment-risk-ci python scripts/check_release.py --manifest deployment/explorer-v1.json --url http://127.0.0.1:8000 > reports/ci/container-smoke.json
+          docker image inspect "$IMAGE" > reports/ci/image.json
+          cp deployment/explorer-v1.json reports/ci/release.json
+      - name: Save verification evidence
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: inference-verification-${{ github.sha }}
+          path: reports/ci/
+          if-no-files-found: error
+      - name: Container logs and cleanup
+        if: always()
+        run: |
+          docker logs payment-risk-ci 2>&1 || true
+          docker rm -f payment-risk-ci 2>/dev/null || true

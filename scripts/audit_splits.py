@@ -1,4 +1,4 @@
-"""Audit duplicates and persist the temporal-v1 split without fitting a model."""
+"""Audit duplicates and persist seeded, stratified, group-disjoint random splits."""
 
 import hashlib
 import json
@@ -6,6 +6,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from sklearn.model_selection import train_test_split
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,6 +18,27 @@ def sha256(path):
         for block in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def assign_group_splits(labels, group_ids, config):
+    """Stratify indivisible exact-pattern groups; Time is not an argument."""
+    names = config["split_names"]
+    fractions = config["target_fractions"]
+    if len(names) != 4 or len(fractions) != 4 or min(fractions) <= 0 or not np.isclose(sum(fractions), 1):
+        raise ValueError("Expected four positive split fractions summing to one")
+    rows = pd.DataFrame({"group": np.asarray(group_ids), "label": np.asarray(labels)})
+    grouped = rows.groupby("group", sort=False).agg(label=("label", "first"), distinct_labels=("label", "nunique"))
+    if grouped.distinct_labels.gt(1).any():
+        raise ValueError("Identical-pattern groups contain conflicting labels")
+    seed = config["random_seed"]
+    train, remaining = train_test_split(grouped, train_size=fractions[0], stratify=grouped.label, random_state=seed)
+    selection, remaining = train_test_split(remaining, train_size=fractions[1] / sum(fractions[1:]), stratify=remaining.label, random_state=seed)
+    calibration, evaluation = train_test_split(remaining, train_size=fractions[2] / sum(fractions[2:]), stratify=remaining.label, random_state=seed)
+    allocations = pd.concat([pd.Series(name, index=part.index) for name, part in zip(names, [train, selection, calibration, evaluation])])
+    result = rows["group"].map(allocations)
+    if result.isna().any() or allocations.index.has_duplicates:
+        raise ValueError("Incomplete or overlapping group allocation")
+    return result.to_numpy()
 
 
 def main():
@@ -40,19 +62,16 @@ def main():
         raise ValueError("Unexpected source schema or population")
     if not np.isfinite(df.to_numpy()).all() or not df.Class.isin([0, 1]).all():
         raise ValueError("Non-finite numeric values or invalid labels")
-    if (df.Time < 0).any() or not df.Time.is_monotonic_increasing:
-        raise ValueError("Expected nonnegative chronological Time")
-    boundaries = config["boundary_seconds"]
+    if (df.Time < 0).any():
+        raise ValueError("Expected nonnegative elapsed Time")
     names = config["split_names"]
-    if boundaries != sorted(set(boundaries)) or len(names) != len(boundaries) + 1:
-        raise ValueError("Invalid split boundaries")
-    split_index = np.searchsorted(boundaries, df.Time, side="right")
-    # Runnable boundary check: exact boundaries must enter the later window.
-    assert np.array_equal(np.searchsorted(boundaries, boundaries, side="right"), [1, 2, 3])
+    pattern_ids = pd.factorize(pd.MultiIndex.from_frame(df[config["group_columns"]]), sort=False)[0]
+    split_labels = assign_group_splits(df.Class, pattern_ids, config)
     assignments = pd.concat(source_rows, ignore_index=True)
     assignments.insert(0, "source_row_id", np.arange(len(df)))
     assignments["Time"] = df.Time
-    assignments["split"] = np.array(names)[split_index]
+    assignments["pattern_group_id"] = pattern_ids
+    assignments["split"] = split_labels
     split_summary = []
     for name in names:
         rows = df.loc[assignments.split.eq(name)]
@@ -61,6 +80,7 @@ def main():
             raise ValueError(f"Split {name} needs both classes")
         split_summary.append({"split": name, "rows": len(rows), "frauds": frauds,
                               "fraud_pct": 100 * frauds / len(rows),
+                              "achieved_fraction": len(rows) / len(df),
                               "time_min": float(rows.Time.min()), "time_max": float(rows.Time.max())})
 
     # Group exact parsed numeric values, rather than approximate similarity.
@@ -70,28 +90,24 @@ def main():
                    "predictors_without_time": predictors[1:]}
     duplicate_summary = {}
     for definition, columns in definitions.items():
-        ids = pd.Series(pd.factorize(pd.MultiIndex.from_frame(df[columns]), sort=False)[0])
-        group_frame = pd.DataFrame({"group": ids, "split_index": split_index, "label": df.Class})
+        ids = pd.Series(pattern_ids if definition == "predictors_without_time" else pd.factorize(pd.MultiIndex.from_frame(df[columns]), sort=False)[0])
+        group_frame = pd.DataFrame({"group": ids, "split": split_labels, "label": df.Class})
         groups = group_frame.groupby("group", sort=False).agg(
             rows=("label", "size"), label_count=("label", "nunique"),
-            split_count=("split_index", "nunique"), first_split=("split_index", "min"))
-        seen_before = ids.map(groups.first_split).to_numpy() < split_index
-        assignments[f"{definition}_seen_in_earlier_split"] = seen_before
-        per_split = {name: int(seen_before[split_index == i].sum()) for i, name in enumerate(names)}
+            split_count=("split", "nunique"))
+        overlaps = ids.map(groups.split_count).gt(1)
+        per_split = {name: int(overlaps[split_labels == name].sum()) for name in names}
         duplicate_summary[definition] = {
             "columns": columns, "unique_groups": len(groups),
             "duplicate_rows_beyond_first": len(df) - len(groups),
             "repeated_groups": int(groups.rows.gt(1).sum()),
             "conflicting_label_groups": int(groups.label_count.gt(1).sum()),
             "groups_spanning_splits": int(groups.split_count.gt(1).sum()),
-            "rows_seen_in_earlier_split": per_split,
+            "rows_overlapping_other_splits": per_split,
         }
-    assert assignments.groupby("Time")["split"].nunique().max() == 1
+    assert assignments.groupby("pattern_group_id")["split"].nunique().max() == 1
+    assert all(result["groups_spanning_splits"] == 0 for result in duplicate_summary.values())
     assert assignments.source_row_id.is_unique and len(assignments) == len(df)
-    evaluation = assignments.split.eq("evaluation")
-    unseen = evaluation & ~assignments.predictors_without_time_seen_in_earlier_split
-    sensitivity = {"rows": int(unseen.sum()), "frauds": int(df.loc[unseen, "Class"].sum()),
-                   "definition": "Evaluation V1–V28/Amount vector absent from every earlier split; duplicates within evaluation retained."}
 
     processed = ROOT / "data/processed"
     processed.mkdir(parents=True, exist_ok=True)
@@ -101,13 +117,13 @@ def main():
         "protocol": config, "source_files": sources,
         "config_sha256": sha256(config_path), "audit_script_sha256": sha256(Path(__file__)),
         "split_summary": split_summary, "duplicates": duplicate_summary,
-        "unseen_pattern_evaluation": sensitivity,
+        "group_disjoint": True,
         "assignments": {"path": str(assignments_path.relative_to(ROOT)),
                         "rows": len(assignments), "sha256": sha256(assignments_path)},
         "limitations": ["No customer/account identifiers; repeated patterns do not establish shared identity.",
                         "Upstream PCA fitting population and feature availability cannot be independently verified.",
-                        "Earlier EDA used labels from all windows; final evaluation is not analytically untouched.",
-                        "Only two days of observations; small fraud counts limit precision and temporal generalization."]
+                        "Earlier full-dataset EDA and chronological baseline experiments preceded this random protocol; final evaluation is not analytically untouched.",
+                        "Same-population random evaluation does not establish future-period or unseen-customer generalization."]
     }
     report_path = ROOT / "reports/duplicate-split-audit.json"
     report_path.write_text(json.dumps(report, indent=2) + "\n")
@@ -116,7 +132,7 @@ def main():
         print(f"{definition}: {summary['duplicate_rows_beyond_first']:,} excess repeats; "
               f"{summary['conflicting_label_groups']} conflicting-label groups; "
               f"{summary['groups_spanning_splits']:,} cross-split groups")
-    print(f"Previously unseen-pattern evaluation: {sensitivity['rows']:,} rows, {sensitivity['frauds']} frauds")
+    print("All four splits are group-disjoint; Time remains a model input.")
     print(f"Saved {assignments_path.relative_to(ROOT)} and {report_path.relative_to(ROOT)}")
 
 
