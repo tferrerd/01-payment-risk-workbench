@@ -1,5 +1,23 @@
 # 01 — Payment Risk Workbench
 
+Fraud-risk scoring, explainable predictions, and payment decisions driven by explicit economics.
+
+[![Inference CI](https://img.shields.io/github/actions/workflow/status/tferrerd/01-payment-risk-workbench/inference-ci.yml?branch=main&style=flat-square&logo=githubactions&logoColor=white&label=Inference%20CI)](https://github.com/tferrerd/01-payment-risk-workbench/actions/workflows/inference-ci.yml)
+[![Live demo on Render](https://img.shields.io/badge/Render-Live_demo-46E3B7?style=flat-square&logo=render&logoColor=white)](https://payment-risk-workbench.onrender.com)
+[![Project case study](https://img.shields.io/badge/Portfolio-Case_study-172A2A?style=flat-square)](https://tomasferrer.com/projects/payment-risk-workbench/)
+
+[![Python 3.12](https://img.shields.io/badge/Python-3.12-3776AB?style=flat-square&logo=python&logoColor=white)](pyproject.toml)
+[![Poetry](https://img.shields.io/badge/Poetry-Dependency_management-60A5FA?style=flat-square&logo=poetry&logoColor=white)](poetry.lock)
+[![LightGBM](https://img.shields.io/badge/LightGBM-4.7.0-298729?style=flat-square)](requirements-inference.txt)
+[![scikit-learn](https://img.shields.io/badge/scikit--learn-1.9.1-F7931E?style=flat-square&logo=scikitlearn&logoColor=white)](requirements-inference.txt)
+[![MLflow](https://img.shields.io/badge/MLflow-3.17.1-0194E2?style=flat-square&logo=mlflow&logoColor=white)](docs/mlflow-tracking.md)
+
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.146.0-009688?style=flat-square&logo=fastapi&logoColor=white)](https://payment-risk-workbench.onrender.com/docs)
+[![Uvicorn](https://img.shields.io/badge/Uvicorn-0.54.0-4051B5?style=flat-square)](requirements-inference.txt)
+[![Pydantic](https://img.shields.io/badge/Pydantic-2.14.1-E92063?style=flat-square&logo=pydantic&logoColor=white)](requirements-inference.txt)
+[![Docker](https://img.shields.io/badge/Docker-Containerized-2496ED?style=flat-square&logo=docker&logoColor=white)](docs/container.md)
+[![aiohappyeyeballs](https://img.shields.io/badge/aiohappyeyeballs-2.7.1-7C3AED?style=flat-square)](poetry.lock)
+
 - **Application:** Fraud detection
 - **Portfolio project:** 01 of 15
 - **Status:** Public demo deployed on Render's Free plan; GitHub container checks and public inference smoke checks passed. A registered LightGBM development candidate powers CSV/API inference, live TreeSHAP explanations, and economic controls. Notebooks 01–08 preserve the historical-scenario evaluation and separate low-margin analysis. Fresh low-margin validation, probability calibration, and remaining operational evidence are still pending.
@@ -7,6 +25,21 @@
 **[Open the live demo](https://payment-risk-workbench.onrender.com)** · [API reference](https://payment-risk-workbench.onrender.com/docs) · [Deployment evidence](reports/cloud-deployment-verification.json). Free instances can take about a minute to wake after inactivity.
 
 Part of [Tomas Ferrer's DS/ML portfolio](https://tomasferrer.com/).
+
+## Technology stack
+
+| Area | Tools | Role in this project |
+| --- | --- | --- |
+| Environment | Python 3.12, Poetry | Reproducible analysis environment and locked dependencies. |
+| Data and exploration | NumPy, pandas, Jupyter/ipykernel, Plotly, Seaborn, Matplotlib | Transaction analysis, notebooks, and visualizations. |
+| Modeling and explanations | scikit-learn, LightGBM, joblib, native LightGBM TreeSHAP contributions | Baselines, fraud scoring, saved models, and individual prediction explanations. |
+| Experiment tracking | MLflow, SQLite | Experiment metrics, artifacts, model registry, and lineage. |
+| API and validation | FastAPI, Uvicorn, Pydantic | Validated prediction and explanation endpoints, ASGI serving, and OpenAPI documentation. |
+| Interface | HTML, CSS, JavaScript | Transaction explorer, policy controls, profit charts, and CSV export. |
+| Delivery | Docker, GitHub Actions, Render | Container packaging, automated checks, and the public demo. |
+| Supporting networking dependencies | aiohttp, **aiohappyeyeballs 2.7.1** | Transitive dependencies in the MLflow development environment: `mlflow → aiohttp → aiohappyeyeballs`. |
+
+FastAPI is used directly by the inference service and pinned in [`requirements-inference.txt`](requirements-inference.txt), alongside Uvicorn and Pydantic. **aiohappyeyeballs** supports asynchronous connection establishment through aiohttp; Poetry installs it transitively for the development stack. It is not included in the lightweight inference runtime. Analysis dependencies are declared in [`pyproject.toml`](pyproject.toml) and resolved in [`poetry.lock`](poetry.lock).
 
 ## Implementation framework
 
