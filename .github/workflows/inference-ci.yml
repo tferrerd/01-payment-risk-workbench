@@ -27,6 +27,9 @@ jobs:
           docker run --rm --read-only --tmpfs /tmp --cap-drop ALL --security-opt no-new-privileges \
             --volume "$PWD/tests:/app/tests:ro" --volume "$PWD/reports/explorer-sample.json:/app/reports/explorer-sample.json:ro" \
             "$IMAGE" python -m unittest discover -s tests -p test_explorer.py -v
+          docker run --rm --read-only --tmpfs /tmp --cap-drop ALL --security-opt no-new-privileges \
+            --volume "$PWD/tests:/app/tests:ro" \
+            "$IMAGE" python -m unittest discover -s tests -p test_monitoring.py -v
       - name: Test browser policy calculations
         run: node --test tests/test_explorer.mjs
       - name: Start API
@@ -36,9 +39,10 @@ jobs:
       - name: Verify real-model HTTP predictions and input validation
         run: |
           mkdir -p reports/ci
-          docker exec payment-risk-ci python scripts/check_release.py --manifest deployment/explorer-v1.json --url http://127.0.0.1:8000 > reports/ci/container-smoke.json
+          docker exec payment-risk-ci python scripts/check_release.py --manifest deployment/explorer-v2.json --url http://127.0.0.1:8000 > reports/ci/container-smoke.json
+          docker exec payment-risk-ci python scripts/check_operations.py --url http://127.0.0.1:8000 --exercise > reports/ci/operations-smoke.json
           docker image inspect "$IMAGE" > reports/ci/image.json
-          cp deployment/explorer-v1.json reports/ci/release.json
+          cp deployment/explorer-v2.json reports/ci/release.json
       - name: Save verification evidence
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:

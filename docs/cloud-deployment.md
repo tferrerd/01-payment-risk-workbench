@@ -15,7 +15,7 @@ The free service has 512 MB RAM and 0.1 CPU. It sleeps after 15 minutes without 
 
 ```bash
 poetry run python scripts/check_release.py \
-  --manifest deployment/explorer-v1.json \
+  --manifest deployment/explorer-v2.json \
   --url https://ACTUAL-SERVICE-URL.onrender.com
 ```
 
@@ -27,4 +27,4 @@ Local Docker verification is implementation evidence. The initial Render deploym
 
 The initial deployment builds on Render from the pinned source/model and base-image digest. It is not claimed to be the identical image built by GitHub Actions: transitive Python dependencies and Debian packages still resolve at build time. Record each deployed image/deploy identity. A later image-publishing step can make CI and deployment consume one immutable registry image.
 
-This remains a public portfolio demonstration of a development candidate. Fresh low-margin model validation, reliable probability calibration, monitoring, retraining and rollback evidence remain subsequent work. No production model promotion is performed by deployment.
+This remains a public portfolio demonstration of a development candidate. The monitoring release and local application rollback are covered by the [operations runbook](operations.md). Fresh low-margin model validation, reliable probability calibration, persistent monitoring, retraining, and a Render rollback exercise remain subsequent work. No production model promotion is performed by deployment.

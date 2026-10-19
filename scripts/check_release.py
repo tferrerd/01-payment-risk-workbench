@@ -11,7 +11,7 @@ from urllib.request import Request, urlopen
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def check_files(root=ROOT, manifest="deployment/release.json"):
+def check_files(root=ROOT, manifest="deployment/explorer-v2.json"):
     release = json.loads((root / manifest).read_text())
     for name, expected in release["files"].items():
         if hashlib.sha256((root / name).read_bytes()).hexdigest() != expected:
@@ -40,6 +40,8 @@ def check_http(url, release):
                 raise
             time.sleep(1)
     assert status == 200 and health["status"] == "ok", health
+    if release.get("monitoring"):
+        assert health["release_id"] == release["release_id"], health
     for key in ["model_id", "model_status", "scenario", "probability_calibrated"]:
         assert health[key] == release[key], (key, health)
     assert math.isclose(health["threshold"], release["threshold"], rel_tol=0, abs_tol=1e-15)
@@ -101,7 +103,7 @@ def check_explorer(url):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--url", help="Also check a running API; wait up to 45 seconds for startup")
-    parser.add_argument("--manifest", default="deployment/release.json")
+    parser.add_argument("--manifest", default="deployment/explorer-v2.json")
     args = parser.parse_args()
     release = check_files(manifest=args.manifest)
     result = {"release_id": release["release_id"], "model_id": release["model_id"],

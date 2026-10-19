@@ -1,0 +1,138 @@
+{
+  "checked_at": "2026-10-19T02:31:11.547320+00:00",
+  "url": "http://127.0.0.1:8000",
+  "health": {
+    "status": "ok",
+    "model_id": "lightgbm-low-margin-dev-v1",
+    "model_status": "development_candidate",
+    "scenario": "low-margin-payments-v1",
+    "threshold": 0.0029910269192422734,
+    "probability_calibrated": false,
+    "release_id": "lightgbm-low-margin-dev-v1-explorer-v2",
+    "revision": "monitoring-drill-worktree"
+  },
+  "telemetry": {
+    "release_id": "lightgbm-low-margin-dev-v1-explorer-v2",
+    "revision": "monitoring-drill-worktree",
+    "started_at": "2026-10-19T02:31:04.532114+00:00",
+    "uptime_seconds": 7.015,
+    "scope": "single worker; resets on restart; latency uses last 1000 requests per route",
+    "requests": {
+      "/predict": {
+        "count": 13,
+        "status_counts": {
+          "200": 3,
+          "422": 10
+        },
+        "latency_sample_count": 13,
+        "latency_mean_ms": 1.233,
+        "latency_p95_ms": 6.704
+      },
+      "/openapi.json": {
+        "count": 1,
+        "status_counts": {
+          "200": 1
+        },
+        "latency_sample_count": 1,
+        "latency_mean_ms": 7.856,
+        "latency_p95_ms": 7.856
+      },
+      "/": {
+        "count": 1,
+        "status_counts": {
+          "200": 1
+        },
+        "latency_sample_count": 1,
+        "latency_mean_ms": 1.662,
+        "latency_p95_ms": 1.662
+      },
+      "/demo": {
+        "count": 1,
+        "status_counts": {
+          "200": 1
+        },
+        "latency_sample_count": 1,
+        "latency_mean_ms": 10.113,
+        "latency_p95_ms": 10.113
+      },
+      "/explain": {
+        "count": 2,
+        "status_counts": {
+          "200": 1,
+          "422": 1
+        },
+        "latency_sample_count": 2,
+        "latency_mean_ms": 2.255,
+        "latency_p95_ms": 4.314
+      },
+      "/other": {
+        "count": 2,
+        "status_counts": {
+          "200": 2
+        },
+        "latency_sample_count": 2,
+        "latency_mean_ms": 1.101,
+        "latency_p95_ms": 1.276
+      }
+    },
+    "predictions": {
+      "payments": 206,
+      "cancels": 11,
+      "fraud_score": {
+        "boundaries": [
+          0.001,
+          0.003,
+          0.01,
+          0.1,
+          0.5
+        ],
+        "counts": [
+          193,
+          1,
+          0,
+          1,
+          0,
+          11
+        ],
+        "intervals": "[lower, upper); first starts at 0, last has no upper bound"
+      },
+      "amount": {
+        "boundaries": [
+          1,
+          10,
+          100,
+          1000,
+          10000
+        ],
+        "counts": [
+          12,
+          71,
+          73,
+          47,
+          2,
+          1
+        ],
+        "intervals": "[lower, upper); first starts at 0, last has no upper bound"
+      },
+      "elapsed_time": {
+        "boundaries": [
+          43200,
+          86400,
+          129600,
+          172800
+        ],
+        "counts": [
+          47,
+          62,
+          33,
+          64,
+          0
+        ],
+        "intervals": "[lower, upper); first starts at 0, last has no upper bound"
+      }
+    }
+  },
+  "alerts": [],
+  "smoke_traffic_generated": true,
+  "limitations": "Per-worker aggregate telemetry, not persistent uptime monitoring or labeled model-quality evidence. Cold-start/network time is outside server latency."
+}

@@ -115,10 +115,10 @@ class InferenceContractTest(unittest.TestCase):
             (temporary / "input.bin").write_bytes(b"original")
             (temporary / "deployment/release.json").write_text(json.dumps({
                 "files": {"input.bin": file_sha256(temporary / "input.bin")}}))
-            check_files(temporary)
+            check_files(temporary, manifest="deployment/release.json")
             (temporary / "input.bin").write_bytes(b"changed")
             with self.assertRaisesRegex(ValueError, "checksum mismatch"):
-                check_files(temporary)
+                check_files(temporary, manifest="deployment/release.json")
 
 
 if __name__ == "__main__":

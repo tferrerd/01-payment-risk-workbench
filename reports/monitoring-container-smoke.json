@@ -1,0 +1,14 @@
+{
+  "release_id": "lightgbm-low-margin-dev-v1-explorer-v2",
+  "model_id": "lightgbm-low-margin-dev-v1",
+  "artifact_sha256": "05dc10d01d58c57c8b8c6b0ed0d8b042ed143da8e5163ec28914fc8422063b4c",
+  "release_files_verified": true,
+  "example_rows": 3,
+  "saved_prediction_parity": true,
+  "invalid_requests_rejected": 9,
+  "openapi_schema_verified": true,
+  "explorer_rows_scored": 200,
+  "explorer_page_and_assets_verified": true,
+  "explanation_reconstructs_score": true,
+  "label_rejected_from_explanation_inputs": true
+}

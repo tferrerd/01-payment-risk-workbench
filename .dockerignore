@@ -11,6 +11,7 @@
 !deployment/
 !deployment/release.json
 !deployment/explorer-v1.json
+!deployment/explorer-v2.json
 !examples/
 !examples/predict-request.json
 !examples/predict-expected.json
@@ -21,3 +22,4 @@
 !web/app.mjs
 !scripts/
 !scripts/check_release.py
+!scripts/check_operations.py

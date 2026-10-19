@@ -11,6 +11,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel, ConfigDict, Field, create_model
 
 from .pipeline import DEFAULT_ARTIFACT, FEATURES, PaymentRiskPipeline
+from .monitoring import MonitoringMiddleware, RELEASE_ID, Telemetry, source_revision
 
 Transaction = create_model(
     "Transaction",
@@ -46,6 +47,7 @@ class PredictionResponse(BaseModel):
 @asynccontextmanager
 async def lifespan(app):
     app.state.pipeline = PaymentRiskPipeline.load(Path(os.environ.get("PAYMENT_RISK_MODEL_PATH", str(DEFAULT_ARTIFACT))))
+    app.state.telemetry = Telemetry()
     yield
     del app.state.pipeline
 
@@ -53,6 +55,7 @@ async def lifespan(app):
 app = FastAPI(title="Payment Risk Workbench", version="0.1.0",
               description="Development-candidate inference under assumed 0.3% legitimate margin and 100% fraud loss. Scores have not been post-hoc calibrated.",
               lifespan=lifespan)
+app.add_middleware(MonitoringMiddleware)
 
 
 @app.exception_handler(RequestValidationError)
@@ -68,16 +71,24 @@ def health(request: Request):
     pipeline = request.app.state.pipeline
     return {"status": "ok", "model_id": pipeline.metadata["model_id"], "model_status": pipeline.metadata["status"],
             "scenario": pipeline.metadata["economics"]["version"], "threshold": pipeline.threshold,
-            "probability_calibrated": False}
+            "probability_calibrated": False, "release_id": RELEASE_ID,
+            "revision": source_revision()}
+
+
+@app.get("/metrics")
+def metrics(request: Request):
+    return request.app.state.telemetry.snapshot()
 
 
 @app.post("/predict", response_model=PredictionResponse)
 def predict(body: PredictionRequest, request: Request):
     pipeline = request.app.state.pipeline
     try:
-        rows = pipeline.predict(pd.DataFrame([item.model_dump() for item in body.transactions]))
+        inputs = pd.DataFrame([item.model_dump() for item in body.transactions])
+        rows = pipeline.predict(inputs)
     except ValueError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
+    request.app.state.telemetry.record_predictions(inputs, rows)
     return {"model_id": pipeline.metadata["model_id"], "model_status": pipeline.metadata["status"],
             "scenario": pipeline.metadata["economics"]["version"], "threshold": pipeline.threshold,
             "predictions": rows.to_dict(orient="records")}

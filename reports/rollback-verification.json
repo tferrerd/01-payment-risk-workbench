@@ -1,0 +1,84 @@
+{
+  "checked_at": "2026-10-19T02:30:56.419077+00:00",
+  "scope": "Isolated local Docker application-release rollback; same model in both releases. Not a Render rollback or a model-version rollback.",
+  "phases": [
+    {
+      "phase": "previous_baseline",
+      "image_id": "sha256:348ead0929b1b8b4a338b346d14d24f3f2e8b2b6827ea827136ea3a3d6cb2c91",
+      "architecture": "arm64",
+      "checks": {
+        "release_id": "lightgbm-low-margin-dev-v1-explorer-v1",
+        "model_id": "lightgbm-low-margin-dev-v1",
+        "artifact_sha256": "05dc10d01d58c57c8b8c6b0ed0d8b042ed143da8e5163ec28914fc8422063b4c",
+        "release_files_verified": true,
+        "example_rows": 3,
+        "saved_prediction_parity": true,
+        "invalid_requests_rejected": 9,
+        "openapi_schema_verified": true,
+        "explorer_rows_scored": 200,
+        "explorer_page_and_assets_verified": true,
+        "explanation_reconstructs_score": true,
+        "label_rejected_from_explanation_inputs": true
+      }
+    },
+    {
+      "phase": "candidate",
+      "image_id": "sha256:99bd874ef96335fa793fe6327e3277377f88c7887952cc380e4850440462c58b",
+      "architecture": "arm64",
+      "checks": {
+        "release_id": "lightgbm-low-margin-dev-v1-explorer-v2",
+        "model_id": "lightgbm-low-margin-dev-v1",
+        "artifact_sha256": "05dc10d01d58c57c8b8c6b0ed0d8b042ed143da8e5163ec28914fc8422063b4c",
+        "release_files_verified": true,
+        "example_rows": 3,
+        "saved_prediction_parity": true,
+        "invalid_requests_rejected": 9,
+        "openapi_schema_verified": true,
+        "explorer_rows_scored": 200,
+        "explorer_page_and_assets_verified": true,
+        "explanation_reconstructs_score": true,
+        "label_rejected_from_explanation_inputs": true
+      }
+    },
+    {
+      "phase": "rollback",
+      "image_id": "sha256:348ead0929b1b8b4a338b346d14d24f3f2e8b2b6827ea827136ea3a3d6cb2c91",
+      "architecture": "arm64",
+      "checks": {
+        "release_id": "lightgbm-low-margin-dev-v1-explorer-v1",
+        "model_id": "lightgbm-low-margin-dev-v1",
+        "artifact_sha256": "05dc10d01d58c57c8b8c6b0ed0d8b042ed143da8e5163ec28914fc8422063b4c",
+        "release_files_verified": true,
+        "example_rows": 3,
+        "saved_prediction_parity": true,
+        "invalid_requests_rejected": 9,
+        "openapi_schema_verified": true,
+        "explorer_rows_scored": 200,
+        "explorer_page_and_assets_verified": true,
+        "explanation_reconstructs_score": true,
+        "label_rejected_from_explanation_inputs": true
+      }
+    },
+    {
+      "phase": "restore_candidate",
+      "image_id": "sha256:99bd874ef96335fa793fe6327e3277377f88c7887952cc380e4850440462c58b",
+      "architecture": "arm64",
+      "checks": {
+        "release_id": "lightgbm-low-margin-dev-v1-explorer-v2",
+        "model_id": "lightgbm-low-margin-dev-v1",
+        "artifact_sha256": "05dc10d01d58c57c8b8c6b0ed0d8b042ed143da8e5163ec28914fc8422063b4c",
+        "release_files_verified": true,
+        "example_rows": 3,
+        "saved_prediction_parity": true,
+        "invalid_requests_rejected": 9,
+        "openapi_schema_verified": true,
+        "explorer_rows_scored": 200,
+        "explorer_page_and_assets_verified": true,
+        "explanation_reconstructs_score": true,
+        "label_rejected_from_explanation_inputs": true
+      }
+    }
+  ],
+  "previous_image_restored": true,
+  "candidate_restored_after_drill": true
+}

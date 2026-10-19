@@ -149,6 +149,16 @@ poetry run uvicorn payment_risk.explorer:app --host 127.0.0.1 --port 8002 --work
 
 Open `http://127.0.0.1:8002/` to search and inspect payments, view live model contributions, change cost assumptions, compare simulated sample profit, and export decisions. The 200 source-derived selection examples are deliberately enriched with fraud, so sample totals are illustrative. [Explorer usage](docs/explorer.md) explains the distinction between the fixed API policy and browser simulations. [Render deployment](docs/cloud-deployment.md) documents the free-tier configuration and the checks required before claiming a public deployment.
 
+### Monitoring and recovery
+
+Release `lightgbm-low-margin-dev-v1-explorer-v2` adds aggregate request/error counts, bounded latency samples, and score/Amount/Time histograms at `/metrics`. `/health` identifies the application release and source revision. The [operations runbook](docs/operations.md) covers alert thresholds, limitations, and recovery commands.
+
+```bash
+python3 scripts/check_operations.py --url https://payment-risk-workbench.onrender.com
+```
+
+The [executed local rollback drill](reports/rollback-verification.json) restored the previous application image and verified saved predictions, validation, and explanations before restoring the candidate. Both releases use the same model; this is application recovery evidence. Telemetry resets on worker restart, and scheduled alerts, persistent monitoring, and a Render rollback drill remain open. See the [operating record](docs/operating-record.md).
+
 ## Current implementation
 
 The [exploration notebook](notebooks/01-exploration.ipynb) covers schema and missingness, duplicates, class imbalance, transaction time and amount distributions, fraud incidence, PCA-feature distributions, and predictor correlations. Executed Seaborn grids and the Spearman heatmap are embedded in the notebook; standalone figures are in `reports/figures/`. These are descriptive findings, not trained-model evaluation or demonstrated business impact.

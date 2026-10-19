@@ -1,0 +1,33 @@
+{
+  "release_id": "lightgbm-low-margin-dev-v1-explorer-v2",
+  "model_id": "lightgbm-low-margin-dev-v1",
+  "model_status": "development_candidate",
+  "model_registry_name": "payment-risk-low-margin",
+  "model_registry_version": 1,
+  "scenario": "low-margin-payments-v1",
+  "probability_calibrated": false,
+  "threshold": 0.0029910269192422734,
+  "artifact_sha256": "05dc10d01d58c57c8b8c6b0ed0d8b042ed143da8e5163ec28914fc8422063b4c",
+  "files": {
+    "requirements-inference.txt": "0c3848908e721ced793bec64187438c9f3fe552557d5d338026281c8feb6ecf6",
+    "models/candidates/lightgbm-low-margin-dev-v1.joblib": "05dc10d01d58c57c8b8c6b0ed0d8b042ed143da8e5163ec28914fc8422063b4c",
+    "models/candidates/lightgbm-low-margin-dev-v1.json": "051d4f62acb77967a114889b782e08f2ef2879757764e35275771df14e54ae32",
+    "examples/predict-request.json": "3fd453097c3a233f2c5663b4f3f392ceff9c89865e890b5322ff44acad88668b",
+    "examples/predict-expected.json": "f03a21ec065e64e88285253a33c5dd30fd5b3d2f26c2799f65b804e4b3448c6b",
+    "payment_risk/__init__.py": "38c71b96fa156c6a96a4767a2be54cdfad565935ff279f36b3daad64bd658067",
+    "payment_risk/__main__.py": "56c36c9056a780523c7d05a14bb607d1d68059daad89f19aa30baf5ff5e281e7",
+    "payment_risk/api.py": "27f6af57d629ef75926fe0c51b1a6c8eca2d68f14356d450f5b4014c88546dd1",
+    "payment_risk/pipeline.py": "b30013d90b4393ca6a5dd81dc09f106806231292d52fdbc2605e02082832f81c",
+    "payment_risk/registry.py": "a4926d5e954f4b814adbd4e3efbbcac9960747c5e14f239ad279cd73656b132b",
+    "payment_risk/explorer.py": "b955b4c17d5dd07fed0b5e029de825ad5500fd6b639ae03f1d2025e2d7a3b3be",
+    "web/index.html": "c28a8636f32d1867018d6e54e8479fb55ecf29d7ea0b870f1babd7ba0d7c84b1",
+    "web/style.css": "495e457d9cc41e0113844087b4264fea0536223b330ef35ae71da1725006d4ff",
+    "web/app.mjs": "0bc70ea535507382df911adac17bb203c58060e3517643c0dff14c39d1036756",
+    "examples/explorer-sample.json": "91d314f64b46e3a5f5b27d099656c3bf26721c63410043abe26d05febf543a94",
+    "scripts/check_release.py": "c444c78d7089e4d6506bc030e2b7d15683d332d3da365ea7013dc19b42254ed9",
+    "payment_risk/monitoring.py": "2bffd59ce503f01fe5fb619683cfbdbd448c994f87bdf32d265cf4b38d805278",
+    "scripts/check_operations.py": "2c7169e2caef8ce254cb84f19e250e0d7b58d0a4bf61e21abb51088c888e786f"
+  },
+  "explorer": true,
+  "monitoring": true
+}

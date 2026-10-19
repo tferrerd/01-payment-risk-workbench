@@ -1,0 +1,11 @@
+# Operating record
+
+## 2026-10-19 UTC — monitoring and local recovery drill
+
+Implemented aggregate operational monitoring for application release `lightgbm-low-margin-dev-v1-explorer-v2`: request/status counts, bounded latency samples, score/input histograms, structured request logs, and source/release identity. The development LightGBM artifact, feature inputs, and low-margin policy were retained. No training, independent model-quality evaluation, or model promotion occurred.
+
+Validation: 17 Python tests, two JavaScript policy tests, and ten runtime-container Python tests passed. The live local-container smoke check verified saved prediction parity, nine invalid requests, all 200 explorer payments, and explanations. The additional monitoring exercise sent three saved payments and an expected-invalid batch; its snapshot counted 206 accepted payments (200 explorer + three release examples + three monitoring examples), and 10 predict-validation rejections. This is generated verification traffic, not observed customer usage. See [HTTP smoke evidence](../reports/monitoring-container-smoke.json) and [monitoring snapshot](../reports/monitoring-verification.json).
+
+The isolated ARM64 Docker drill verified four phases: prior v1 baseline, v2 candidate, restoration of the exact prior image, and restoration of the candidate image. Prediction parity and explorer checks passed in every phase. [Rollback evidence](../reports/rollback-verification.json) records immutable image IDs and model checksum. The drill published no host port, removed only its own container, and did not change Render or the existing local explorer. Both images embed the same model; this is an application rollback rather than a model-version rollback.
+
+Alert criteria and recovery steps are in the [runbook](operations.md). Thresholds are provisional. Error/latency tests cover failure detection, but no scheduled monitoring or notification destination has been enabled. Persistent uptime/telemetry storage, delayed-label model-quality monitoring, fresh low-margin validation/calibration, retraining, and an executed Render rollback remain open. Initial public deployment evidence is preserved separately in [the original cloud report](../reports/cloud-deployment-verification.json).

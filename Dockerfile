@@ -3,7 +3,7 @@ FROM python:3.12-slim-bookworm@sha256:34386ef0cb081344d7ec1c103ba398e6e9f64e9ab3
 ARG REVISION=local
 LABEL org.opencontainers.image.title="Payment Risk Workbench" \
       org.opencontainers.image.revision="${REVISION}" \
-      io.payment-risk.release="lightgbm-low-margin-dev-v1-explorer-v1" \
+      io.payment-risk.release="lightgbm-low-margin-dev-v1-explorer-v2" \
       io.payment-risk.model-sha256="05dc10d01d58c57c8b8c6b0ed0d8b042ed143da8e5163ec28914fc8422063b4c"
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
@@ -22,16 +22,19 @@ COPY payment_risk/ ./payment_risk/
 COPY models/candidates/lightgbm-low-margin-dev-v1.joblib models/candidates/lightgbm-low-margin-dev-v1.json ./models/candidates/
 COPY deployment/release.json ./deployment/release.json
 COPY deployment/explorer-v1.json ./deployment/explorer-v1.json
+COPY deployment/explorer-v2.json ./deployment/explorer-v2.json
 COPY examples/predict-request.json examples/predict-expected.json ./examples/
 COPY examples/explorer-sample.json ./examples/explorer-sample.json
 COPY web/ ./web/
 COPY scripts/check_release.py ./scripts/check_release.py
+COPY scripts/check_operations.py ./scripts/check_operations.py
 
 USER 10001:10001
-RUN python scripts/check_release.py --manifest deployment/explorer-v1.json \
+RUN python scripts/check_release.py --manifest deployment/explorer-v2.json \
     && python -c 'from payment_risk import PaymentRiskPipeline; PaymentRiskPipeline.load()'
 
-ENV OMP_THREAD_LIMIT=1 \
+ENV APP_REVISION=${REVISION} \
+    OMP_THREAD_LIMIT=1 \
     OMP_WAIT_POLICY=PASSIVE \
     GOMP_SPINCOUNT=0
 
